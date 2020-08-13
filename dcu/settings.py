@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'universities',
     'core',
     'students',
+    'employees',
+    'crispy_forms',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -113,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -136,3 +139,5 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGOUT_REDIRECT_URL = 'login'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
