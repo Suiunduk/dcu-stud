@@ -3,4 +3,5 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    pass
+    is_student = models.BooleanField(default=False)
+    is_employee = models.BooleanField(default=False)

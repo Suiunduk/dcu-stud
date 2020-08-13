@@ -9,8 +9,8 @@ class University(models.Model):
     university_name = models.CharField('Название учебного заведения', max_length=200)
     university_address = models.CharField('Фактический адрес учебного заведения', max_length=200)
 
-    def __str__(self):
-        return f'{self.university_name}'
+    #def __str__(self):
+        #return f'{self.university_name}'
 
     #def get_absolute_url(self):
     #    return reverse('university-detail', kwargs={'pk': self.pk})
