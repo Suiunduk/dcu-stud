@@ -71,12 +71,13 @@ class StudentSignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2', 'lastname', 'firstname')
+        fields = ('email', 'password1', 'password2', 'lastname', 'firstname')
 
     @transaction.atomic
     def save(self):
         user = super(StudentSignUpForm, self).save(commit=False)
         user.is_student = True
+        user.username = self.cleaned_data.get('email')
         user.save()
         student = Student.objects.create(user=user,
                                          lastname=self.cleaned_data.get('lastname'),
