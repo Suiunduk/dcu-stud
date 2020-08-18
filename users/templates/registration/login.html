@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>{{ name | default:"Students management" }}</title>
+  <title>{{ name | default:"Вход в систему" }}</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet"
@@ -62,8 +62,9 @@
             </tr>
           </table>
 
-      <input type="submit" value="Войти" class="btn btn-primary mt-2">
-          <input type="hidden" name="Далее" value="{{ next }}">
+         <input type="submit" value="Войти" class="btn btn-primary mt-2">
+         <input type="hidden" name="Далее" value="{{ next }}">
+         <a href="/students/signup" class="btn btn-primary mt-2">Регистрация</a>
         </form>
       </div>
       <!-- /.login-card-body -->

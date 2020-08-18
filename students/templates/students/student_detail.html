@@ -1,0 +1,126 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content-header %}
+<div class="card-header">
+  <div class="card-tools">
+    <a href="#" class="btn btn-tool">Print</a>
+    <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool">
+      <i class="fas fa-edit"></i>
+    </a>
+    <a href="{% url 'student-delete' object.user_id %}" class="btn btn-tool">
+      <i class="fas fa-times"></i>
+    </a>
+  </div>
+</div>
+{% endblock content-header %}
+
+{% block content %}
+    <div class="row mb-4">
+      <div class="col-sm-4">
+        <div class="row mb-2">
+
+          <div class="float-right">
+            <h4>{{ object.lastname }} </h4>
+            <h4>{{ object.firstname }} </h4>
+            <h4>{{ object.fathersname }} </h4>
+          </div>
+        </div>
+
+        <h6><b>Статус студента:</b> {{ object.status }}</h6>
+        <h6><b>Номер телефона:</b> {{ object.phone_number }}</h6>
+        <h6><b>Электронная почта:</b> {{ object.email }}</h6>
+
+
+      </div>
+      <div class="col-sm-8">
+        <div>
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Дата рождения
+            </label>
+            <div class="col">
+              {{ object.date_of_birth }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Пол
+            </label>
+            <div class="col">
+              {{ object.gender }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Предыдущее место обучения
+            </label>
+            <div class="col">
+              {{ object.university}}
+            </div>
+            <div class="col">
+              {{ object.last_education_place}}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Страна обучения
+            </label>
+            <div class="col">
+              {{ object.education_country }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Имя учебного заведения
+            </label>
+            <div class="col">
+              {{ object.university_name }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Год поступления
+            </label>
+            <div class="col">
+              {{ object.year_of_applying }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Программа образования
+            </label>
+            <div class="col">
+              {{ object.education_program }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Период обучения
+            </label>
+            <div class="col">
+              {{ object.education_period }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Специальность
+            </label>
+            <div class="col">
+              {{ object.speciality }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock content %}

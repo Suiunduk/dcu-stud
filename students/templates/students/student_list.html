@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Список зарегистрированных в системе студентов{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'student-create' %}"><i
+    class="fas fa-plus"></i> Добавить</a>
+<a class="btn btn-primary" href="#"><i
+    class="fas fa-upload"></i> Загрузить</a>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  <table id="studenttable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Ф.И.О.</th>
+        <th>E-mail</th>
+        <th>Страна обучения</th>
+        <th>Пол</th>
+        <th>Номер телефона</th>
+        <th>Статус</th>
+      </tr>
+        <tr id="filters">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+
+    </thead>
+    <tbody>
+
+      {% for student in students %}
+        <tr class='clickable-row' data-href="{% url  'student-detail' student.user_id %}">
+          <td>{{ forloop.counter}}</td>
+          <td>{{ student.lastname}} {{student.firstname }} {{student.fathersname }}</td>
+          <td>{{ student.email}}</td>
+          <td>{{ student.education_country}}</td>
+          <td>{{ student.gender}}</td>
+          <td>{{ student.phone_number}}</td>
+          <td>{{ student.status}}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+
+<script>
+
+    $('#studenttable').DataTable({
+        "language": {
+        "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true,
+        initComplete: function () {
+            this.api().columns().every(function () {
+                var column = this;
+
+                if (column.index() == 1 || column.index() == 2 || column.index() == 5) {
+
+                    input = $('<input type="text" />').appendTo($(column.header())).on('keyup change', function () {
+                        if (column.search() !== this.value) {
+                            column.search(this.value)
+                                .draw();
+                        }
+                    });
+                    return;
+                }
+
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($("#filters").find("th").eq(column.index()))
+                    .on('change', function () {
+                    var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val());
+
+                    column.search(val ? '^' + val + '$' : '', true, false)
+                        .draw();
+                });
+
+                console.log(select);
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+        }
+    });
+
+</script>
+{% endblock morejs %}

@@ -26,7 +26,7 @@ class EmployeeSignUpForm(UserCreationForm):
     @transaction.atomic
     def save(self):
         user = super(EmployeeSignUpForm, self).save(commit=False)
-        user.is_student = True
+        user.is_employee = True
         user.save()
         employee = Employee.objects.create(user=user,
                                            lastname=self.cleaned_data.get('lastname'),

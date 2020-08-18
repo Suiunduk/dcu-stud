@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Список учебных заведений{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'university-create' %}"><i
+    class="fas fa-plus"></i> Добавить</a>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="universitytable" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название учебного заведения</th>
+        <th>Фактический адрес учебного заведения</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for university in universities %}
+        <tr class='clickable-row' data-href="{% url  'university-detail' university.id %}">
+          <td>{{ forloop.counter}}</td>
+          <td>{{ university.university_name}}</td>
+          <td>{{ university.university_address}}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+<script>
+    $('#universitytable').DataTable({
+       "language": {
+        "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"}
+    });
+</script>
+
+{% endblock morejs %}

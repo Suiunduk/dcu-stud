@@ -11820,6 +11820,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 .sidebar {
   height: calc(100% - (3.5rem + 1px));
   overflow-y: auto;
+  margin-top: 0;
   padding-bottom: 0;
   padding-left: 0.5rem;
   padding-right: 0.5rem;

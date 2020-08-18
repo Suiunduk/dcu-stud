@@ -16,6 +16,7 @@ class Student(models.Model):
     date_of_birth = models.DateField('Дата рождения')
     gender = models.CharField('Пол', max_length=10, default='Мужской')
     last_edu = models.CharField('Последнее место обучения', max_length=70)
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
     last_education_place = models.CharField('Название предыдущего учебного заведения', max_length=220, blank=True)
     education_country = models.CharField('Страна обучения', max_length=200)
     university_name = models.CharField('Название учебного заведения', max_length=200)
@@ -33,7 +34,7 @@ class Student(models.Model):
     parent_second_name = models.CharField('ФИО второго родственника', max_length=200, blank=True)
     parent_second_type = models.CharField('Степень родства', max_length=200, blank=True)
     parent_second_phone_number = models.CharField('Телефонные номера', max_length=200, blank=True)
-    university = models.ForeignKey(University, on_delete=models.CASCADE)
+
 
     class Meta:
         ordering = ['lastname', 'firstname', 'fathersname']
@@ -41,5 +42,9 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.lastname} {self.firstname} {self.fathersname} ({self.phone_number})'
 
-    #def get_absolute_url(self):
-    #    return reverse('student-detail', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('student-detail', kwargs={'pk': self.pk})
+
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        return super(self.__class__, self).delete(*args, **kwargs)
