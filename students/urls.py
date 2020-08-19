@@ -14,5 +14,5 @@ urlpatterns = [
     path('delete/<int:pk>/', StudentDeleteView.as_view(), name='student-delete'),
     path('message/', views.contact_view, name='email-send'),
     path('success/', views.email_success, name='email-success'),
-
+    path('export/', views.export_data, name='export-students'),
 ]

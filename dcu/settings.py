@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'employees',
     'crispy_forms',
     'widget_tweaks',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,8 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

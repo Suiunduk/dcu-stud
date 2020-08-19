@@ -14,6 +14,7 @@ from django.views.generic import CreateView, FormView, DetailView, UpdateView, D
 
 from core.decorators import employee_required, superuser_required, super_or_emp_required, student_required
 from dcu import settings
+from dcu.resources import StudentResource
 from students.forms import StudentSignUpForm, StudentCreateForm, StudentUpdateForm, ContactForm
 from students.models import Student
 from users.models import CustomUser
@@ -138,3 +139,25 @@ def contact_view(request):
 def email_success(reguest):
     message = 'Ваше сообщение отправлено успешно!'
     return render(reguest, 'students/email_success.html', {'message': message})
+
+
+def export_data(request):
+    if request.method == 'POST':
+        # Get selected option from form
+        file_format = request.POST['file-format']
+        student_resource = StudentResource()
+        dataset = student_resource.export()
+        if file_format == 'CSV':
+            response = HttpResponse(dataset.csv, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
+            return response
+        elif file_format == 'JSON':
+            response = HttpResponse(dataset.json, content_type='application/json')
+            response['Content-Disposition'] = 'attachment; filename="exported_data.json"'
+            return response
+        elif file_format == 'XLS(Excel)':
+            response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+            response['Content-Disposition'] = 'attachment; filename="exported_data.xls"'
+            return response
+
+    return render(request, 'students/students_export.html')
