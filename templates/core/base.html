@@ -83,7 +83,7 @@
 
             {% if  user.is_authenticated and user.is_student%}
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{% url 'email-send' %}" class="nav-link">
                     <i class="nav-icon fas fa-envelope"></i>
                     <p>
                       Обратная связь

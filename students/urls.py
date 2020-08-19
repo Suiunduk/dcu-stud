@@ -12,5 +12,7 @@ urlpatterns = [
     path('create/', StudentCreateView.as_view(), name='student-create'),
     path('<int:pk>/update/', StudentUpdateView.as_view(), name='student-update'),
     path('delete/<int:pk>/', StudentDeleteView.as_view(), name='student-delete'),
+    path('message/', views.contact_view, name='email-send'),
+    path('success/', views.email_success, name='email-success'),
 
 ]

@@ -28,7 +28,7 @@ class UniversityDetailView(LoginRequiredMixin, DetailView):
 class UniversityCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = University
     fields = '__all__'
-    success_message = "New university successfully added."
+    success_message = "Новый университет успешно добавлен"
 
     def get_form(self, **kwargs):
         form = super(UniversityCreateView, self).get_form()
@@ -38,7 +38,7 @@ class UniversityCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class UniversityUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = University
     fields = '__all__'
-    success_message = "Record successfully updated."
+    success_message = "Запись успешно обновлена"
 
     def get_form(self, **kwargs):
         form = super(UniversityCreateView, self).get_form()

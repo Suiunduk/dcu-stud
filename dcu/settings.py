@@ -144,3 +144,11 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mon.edu.kg@gmail.com'
+EMAIL_HOST_PASSWORD = 'ministry123'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'mymail@mail.ru'

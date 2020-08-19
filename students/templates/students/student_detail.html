@@ -4,13 +4,20 @@
 {% block content-header %}
 <div class="card-header">
   <div class="card-tools">
-    <a href="#" class="btn btn-tool">Print</a>
-    <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool">
-      <i class="fas fa-edit"></i>
-    </a>
-    <a href="{% url 'student-delete' object.user_id %}" class="btn btn-tool">
-      <i class="fas fa-times"></i>
-    </a>
+    {% if  user.is_authenticated and user.is_student%}
+        <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool">
+          <i class="fas fa-edit"></i>
+        </a>
+    {% endif %}
+    {% if  user.is_authenticated and user.is_superuser or user.is_employee%}
+        <a href="#" class="btn btn-tool">Печать</a>
+        <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a href="{% url 'student-delete' object.user_id %}" class="btn btn-tool">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+    {% endif %}
   </div>
 </div>
 {% endblock content-header %}
