@@ -5,8 +5,11 @@
 <div class="card-header">
   <div class="card-tools">
     <!--<a href="#" class="btn btn-tool">Print</a>-->
-    <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool">
-      <i class="fas fa-edit"></i>
+    <a class="btn btn-tool" href="{% url 'change_password' %}"><i class="fas fa-edit"></i>
+        Изменить пароль
+    </a>
+    <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool"><i class="fas fa-user-edit"></i>
+        Изменить данные
     </a>
   </div>
 </div>
@@ -124,8 +127,6 @@
               {{ object.education_form }}
             </div>
           </div>
-
-          <a class="btn btn-primary" href="{% url 'change_password' %}">Изменить пароль</a>
 
         </div>
 
