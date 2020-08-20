@@ -9,7 +9,7 @@ from users.models import CustomUser
 class EmployeeSignUpView(CreateView):
     model = CustomUser
     form_class = EmployeeSignUpForm
-    template_name = 'signup.html'
+    template_name = 'signup_emp.html'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'employee'

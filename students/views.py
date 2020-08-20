@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail, BadHeaderError
 from django.forms import widgets
-from django import forms
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -114,9 +113,13 @@ def contact_view(request):
         form = ContactForm(request.POST)
         # Если форма заполнена корректно, сохраняем все введённые пользователем значения
         if form.is_valid():
+            user = request.user
+            student = Student.objects.get(pk=user.id)
+            full_name = form.cleaned_data['full_name'] = student.lastname + ' ' + \
+                                                         student.firstname + ' ' + student.fathersname
             subject = form.cleaned_data['subject']
             sender = form.cleaned_data['sender']
-            message = 'Сообщение от ' + form.cleaned_data['sender'] + '\n \n' + form.cleaned_data['message']
+            message = 'Сообщение от ' + full_name + '(' + sender + ')' + '\n \n' + form.cleaned_data['message']
             copy = form.cleaned_data['copy']
 
             recipients = [settings.EMAIL_HOST_USER]
@@ -132,7 +135,7 @@ def contact_view(request):
     else:
         # Заполняем форму
         form = ContactForm()
-    # Отправляем форму на страницу
+    # Отправляем форму на страниц
     return render(request, 'students/send_email.html', {'form': form, 'username': auth.get_user(request).username})
 
 

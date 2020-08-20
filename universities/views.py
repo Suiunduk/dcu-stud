@@ -41,7 +41,7 @@ class UniversityUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "Запись успешно обновлена"
 
     def get_form(self, **kwargs):
-        form = super(UniversityCreateView, self).get_form()
+        form = super(UniversityUpdateView, self).get_form()
         return form
 
 

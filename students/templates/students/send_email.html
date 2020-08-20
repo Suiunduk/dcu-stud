@@ -3,6 +3,7 @@
 
 {% block title %}
 Отправить сообщение министерству
+    <p>Ваше сообщение будет отправлено на электронную почту Министерства Образования КР с указанием вашего ФИО и Email</p>
 {% endblock title %}
 
 
@@ -11,15 +12,19 @@
 <form action="" method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
+    <div>
+	  {{ form.full_name.errors }}
+	  {{ form.full_name }}
+	</div>
+    <div>
+	  <label for="id_sender">E-mail отправителя:</label>
+	  {{ form.sender.errors }}
+	  {{ form.sender }}
+	</div>
 	<div>
 	  <label for="id_subject">Тема:</label>
 	  {{ form.subject.errors }}
 	  {{ form.subject }}
-	</div>
-	<div>
-	  <label for="id_sender">E-mail:</label>
-	  {{ form.sender.errors }}
-	  {{ form.sender }}
 	</div>
 	<div>
 	  <label for="id_message">Сообщение:</label>

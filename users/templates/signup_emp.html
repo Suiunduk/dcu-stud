@@ -36,7 +36,7 @@
     <!-- /.login-logo -->
     <div class="card">
       <div class="card-body login-card-body text-center">
-        <p class="login-box-msg">Регистрация нового студента</p>
+        <p class="login-box-msg">Регистрация сотрудника ВУЗа</p>
 
         {% if form.errors %}
         <p style="color: red">Ваши данные не совпадают. Пожалуйста, попробуйте ещё раз.</p>
@@ -77,85 +77,13 @@
               <td><h6>Отчество:</h6></td>
               <td>{{ form.fathersname | add_class:"form-control"}}</td>
             </tr>
-            <tr class="mb-2">
-              <td><h6>Дата рождения:</h6></td>
-              <td>{{ form.date_of_birth | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Пол:</h6></td>
-              <td>{{ form.gender | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Предыдущее образование:</h6></td>
-              <td>{{ form.last_edu | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Предыдущий ВУЗ:</h6></td>
+            <tr>
+              <td><h6>ВУЗ:</h6></td>
               <td>{{ form.university | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Другое место обучения:</h6></td>
-              <td>{{ form.last_education_place | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Страна обучения:</h6></td>
-              <td>{{ form.education_country | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Название университета:</h6></td>
-              <td>{{ form.university_name | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Год поступления:</h6></td>
-              <td>{{ form.year_of_applying | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Программа обучения:</h6></td>
-              <td>{{ form.education_program | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Период обучения:</h6></td>
-              <td>{{ form.education_period | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Специальность:</h6></td>
-              <td>{{ form.speciality | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Форма обучения:</h6></td>
-              <td>{{ form.education_form | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Статус:</h6></td>
-              <td>{{ form.status | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
               <td><h6>Телефонный номер:</h6></td>
               <td>{{ form.phone_number | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>ФИО одного из родственников:</h6></td>
-              <td>{{ form.parent_name | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Степень родства:</h6></td>
-              <td>{{ form.parent_type | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Телефонные номера:</h6></td>
-              <td>{{ form.parent_phone_number | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>ФИО одного из родственников:</h6></td>
-              <td>{{ form.parent_second_name | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Степень родства:</h6></td>
-              <td>{{ form.parent_second_type | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Телефонные номера:</h6></td>
-              <td>{{ form.parent_second_phone_number | add_class:"form-control"}}</td>
             </tr>
           </table>
 

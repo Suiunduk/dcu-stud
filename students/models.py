@@ -15,7 +15,6 @@ class Student(models.Model):
     fathersname = models.CharField('Отчество', max_length=200, blank=True)
     date_of_birth = models.DateField('Дата рождения')
     gender = models.CharField('Пол', max_length=10, default='Мужской')
-    last_edu = models.CharField('Последнее место обучения', max_length=70)
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     last_education_place = models.CharField('Название предыдущего учебного заведения', max_length=220, blank=True)
     education_country = models.CharField('Страна обучения', max_length=200)
