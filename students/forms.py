@@ -125,7 +125,7 @@ class StudentCreateForm(UserCreationForm):
     education_form = forms.ChoiceField(label='форма обучения', choices=EDU_FORM)
     status = forms.ChoiceField(label='Статус', choices=STATUS)
     phone_number = forms.CharField(label='Номер телефона', max_length=20)
-    email = forms.EmailField(label='Email', )
+    email = forms.EmailField(label='Email' )
     parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
     parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
     parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)

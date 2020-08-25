@@ -10,10 +10,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView
-
 from core.decorators import employee_required, superuser_required, super_or_emp_required, student_required
 from dcu import settings
 from dcu.resources import StudentResource
+from employees.models import Employee
 from students.forms import StudentSignUpForm, StudentCreateForm, StudentUpdateForm, ContactForm
 from students.models import Student
 from users.models import CustomUser
@@ -68,7 +68,13 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 @super_or_emp_required
 def student_list(request):
-    students = Student.objects.all()
+    user = request.user
+    customUser = CustomUser.objects.get(pk=user.id)
+    if customUser.is_employee:
+        employee = Employee.objects.get(pk=user.id)
+        students = Student.objects.filter(university=employee.university)
+    else:
+        students = Student.objects.all()
     return render(request, 'students/student_list.html', {"students": students})
 
 

@@ -14,21 +14,24 @@
   </div>
 </div>
 {% endblock content-header %}
-
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'employee-create' %}"><i
+        class="fas fa-plus"></i> Добавить сотрудника</a>
+    {% endblock breadcrumb %}
 {% block content %}
-    <div class="row mb-4">
+    <div class="row mb-4 border-bottom">
       <div class="col-sm-4">
         <div class="row mb-2">
 
           <div class="float-right">
-            <h4>{{ object.university_name }} </h4>
+            <h3>{{ object.university_name }} </h3>
           </div>
         </div>
 
       </div>
       <div class="col-sm-8">
         <div>
-          <div class="form-group border-bottom row">
+          <div class="form-group row">
             <label class="col">
               Фактический адрес университета
             </label>
@@ -36,37 +39,45 @@
               {{ object.university_address }}
             </div>
           </div>
-<!--
-          <div class="form-group border-bottom row">
-            <label class="col">
-              Ф.И.О. ответственного сотрудника
-            </label>
-            <div class="col">
-              {{ object.emp_lastname}} {{ object.emp_firstname }} {{ object.emp_fathersname }}
-            </div>
-          </div>
-
-          <div class="form-group border-bottom row">
-            <label class="col">
-              Номер телефона ответсвенного сотрудника
-            </label>
-            <div class="col">
-              {{ object.phone_number }}
-            </div>
-          </div>
-          <div class="form-group border-bottom row">
-            <label class="col">
-              Электронная почта ответственного сотрудника
-            </label>
-            <div class="col">
-              {{ object.email }}
-            </div>
-          </div>
--->
         </div>
-
       </div>
     </div>
 
+    <h4>Список ответсвенных сотрудников:</h4>
+    <div>
+             <table id="employeetable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+                <thead class="thead-light">
+                  <tr>
+                    <th>№</th>
+                    <th>Ф.И.О.</th>
+                    <th>E-mail</th>
+                    <th>Номер телефона</th>
+                  </tr>
+                </thead>
+                <tbody>
 
+                  {% for employee in employees %}
+                    <tr class='clickable-row' data-href="{% url  'employee-detail' employee.user_id %}">
+                      <td>{{ forloop.counter}}</td>
+                      <td>{{ employee.lastname}} {{employee.firstname }} {{employee.fathersname }}</td>
+                      <td>{{ employee.email}}</td>
+                      <td>{{ employee.phone_number}}</td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+          </div>
 {% endblock content %}
+
+{% block morejs %}
+
+<script>
+
+    $('#employeetable').DataTable({
+        "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true
+    });
+
+</script>
+{% endblock morejs %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
+from employees.models import Employee
 from universities.models import University
 
 @login_required
@@ -22,6 +23,7 @@ class UniversityDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UniversityDetailView, self).get_context_data(**kwargs)
+        context['employees'] = Employee.objects.filter(university=self.kwargs['pk'])
         return context
 
 
