@@ -15,7 +15,7 @@
 </div>
 {% endblock content-header %}
 {% block breadcrumb %}
-    <a class="btn btn-primary" href="{% url 'employee-create' %}"><i
+    <a class="btn btn-primary" href="{% url 'employee-create' fk=object.id %}"><i
         class="fas fa-plus"></i> Добавить сотрудника</a>
     {% endblock breadcrumb %}
 {% block content %}
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <h4>Список ответсвенных сотрудников:</h4>
+    <h4>Список ответственных сотрудников:</h4>
     <div>
              <table id="employeetable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
                 <thead class="thead-light">

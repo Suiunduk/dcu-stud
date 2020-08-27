@@ -48,8 +48,8 @@ class EmployeeCreateForm(UserCreationForm):
     university = forms.ModelChoiceField(label='Университет', widget=forms.Select, queryset=universities, required=False)
 
     class Meta(UserCreationForm.Meta):
-            model = CustomUser
-            fields = ('email', 'password1', 'password2', 'lastname', 'firstname')
+        model = CustomUser
+        fields = ('email', 'password1', 'password2', 'lastname', 'firstname')
 
     @transaction.atomic
     def save(self):
@@ -67,13 +67,13 @@ class EmployeeCreateForm(UserCreationForm):
         return user
 
 
-class EmployeeUpdateForm(UserCreationForm):
+class EmployeeUpdateForm(forms.ModelForm):
     lastname = forms.CharField(label='Фамилия', max_length=100)
     firstname = forms.CharField(label='Имя', max_length=100)
     fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
     phone_number = forms.CharField(label='Номер телефона', max_length=20)
     email = forms.EmailField(label='Email')
 
-    class Meta(UserCreationForm.Meta):
-            model = CustomUser
-            fields = ('lastname', 'firstname', 'fathersname', 'phone_number', 'email')
+    class Meta:
+        model = Employee
+        fields = ('lastname', 'firstname', 'fathersname', 'phone_number', 'email')

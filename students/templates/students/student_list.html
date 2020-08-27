@@ -22,16 +22,6 @@
         <th>Номер телефона</th>
         <th>Статус</th>
       </tr>
-        <tr id="filters">
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-
     </thead>
     <tbody>
 
@@ -54,12 +44,54 @@
 
 {% block morejs %}
 
-<script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#studenttable thead tr').clone(true).appendTo( '#studenttable thead' );
+    $('#studenttable thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
 
-    $('#studenttable').DataTable({
+        $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" />' );
+
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+    var table = $('#studenttable').DataTable({
+        orderCellsTop: true,
+        fixedHeader: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel', // Extend the excel button
+                excelStyles: [                      // Add an excelStyles definition
+                {
+                    template: 'green_medium',   // Apply the 'green_medium' template
+                },
+                {
+                    cells: 'sh',                // Use Smart References (s) to target the header row (h)
+                    style: {                    // The style definition
+                        font: {                 // Style the font
+                            size: 14,           // Size 14
+                            b: false,           // Turn off the default bolding of the header row
+                        },
+                        fill: {                 // Style the cell fill
+                            pattern: {          // Add a pattern (default is solid)
+                                color: '1C3144' // Define the fill color
+                            }
+                        }
+                    }
+                }
+            ]
+            }
+        ],
         "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
         "scrollX": true,
-        initComplete: function () {
+        /*initComplete: function () {
             this.api().columns().every(function () {
                 const column = this;
 
@@ -90,8 +122,8 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-        }
+        },*/
     });
-
+});
 </script>
 {% endblock morejs %}
