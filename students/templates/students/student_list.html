@@ -1,15 +1,22 @@
 {% extends 'core/base.html' %}
-
+{% block pagename %}Списов студентов{% endblock pagename %}
 {% block title %}Список зарегистрированных в системе студентов{% endblock title %}
 
 {% block breadcrumb %}
 <a class="btn btn-primary" href="{% url 'student-create' %}"><i
     class="fas fa-plus"></i> Добавить</a>
-<a class="btn btn-primary" href="{% url 'export-students' %}"><i
-    class="fas fa-download"></i> Выгрузить данные</a>
 {% endblock breadcrumb %}
 
 {% block content %}
+<button class="btn btn-secondary" id="show-btn" style="margin-bottom: 10px"> Показать/Скрыть столбцы <i class="fas fa-arrow-down" id="btn-icon"></i></button>
+<div class="list_view border-danger" id="checkboxes" style="display: none">
+  <label class="form-control" for="1"><input  type="checkbox" name="list" data-target ="1" value="Ф.И.О" id="1" checked> Ф.И.О</label>
+  <label class="form-control" for="2"><input type="checkbox" name="list" data-target ="2" value="E-mail" id="2"  checked> E-mail</label>
+  <label class="form-control" for="3"><input type="checkbox" name="list" data-target ="3" value="Страна обучения" id="3"  checked> Страна обучения</label>
+  <label class="form-control" for="4"><input type="checkbox" name="list" data-target ="4"  value="Пол" id="4"  checked> Пол</label>
+  <label class="form-control" for="5"><input type="checkbox" name="list" data-target ="5"  value="Номер телефона" id="5"  checked> Номер телефона</label>
+  <label class="form-control" for="6"><input type="checkbox" name="list" data-target ="6"  value="Статус" id="6"  checked> Статус</label>
+</div>
 
   <table id="studenttable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
     <thead class="thead-light">
@@ -43,54 +50,49 @@
 
 
 {% block morejs %}
-
 <script type="text/javascript">
+
 $(document).ready(function () {
     $('#studenttable thead tr').clone(true).appendTo( '#studenttable thead' );
     $('#studenttable thead tr:eq(1) th').each( function (i) {
         var title = $(this).text();
 
-        $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" />' );
 
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
+        /*if($(this).index() == 0 || $(this).index() == 1 || $(this).index() == 2 || $(this).index() == 5){*/
+            $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" />' );
+            $('input', this).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        /*}*/
     } );
+
     var table = $('#studenttable').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
         dom: 'Bfrtip',
         buttons: [
             {
-                extend: 'excel', // Extend the excel button
-                excelStyles: [                      // Add an excelStyles definition
-                {
-                    template: 'green_medium',   // Apply the 'green_medium' template
-                },
-                {
-                    cells: 'sh',                // Use Smart References (s) to target the header row (h)
-                    style: {                    // The style definition
-                        font: {                 // Style the font
-                            size: 14,           // Size 14
-                            b: false,           // Turn off the default bolding of the header row
-                        },
-                        fill: {                 // Style the cell fill
-                            pattern: {          // Add a pattern (default is solid)
-                                color: '1C3144' // Define the fill color
-                            }
-                        }
-                    }
+                extend: 'excelHtml5',
+                text: 'Выгрузить в Excel',
+                exportOptions: {
+                    columns: ':visible'
                 }
-            ]
+            },
+            {
+                extend: 'pdfHtml5',
+                text: 'Выгрузить в PDF',
+                exportOptions: {
+                    columns: ':visible'
+                }
             }
         ],
         "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
-        "scrollX": true,
+        "scrollX": true
         /*initComplete: function () {
             this.api().columns().every(function () {
                 const column = this;
@@ -123,6 +125,27 @@ $(document).ready(function () {
                 });
             });
         },*/
+    });
+
+    $('.list_view input[type="checkbox"]').on('change', function(e) {
+        // Get the column API object
+        var col = table.column($(this).attr('data-target'));
+        // Toggle the visibility
+        col.visible(!col.visible());
+    });
+    $(document).on('click', '#show-btn', function(e) {
+        var div = document.getElementById('checkboxes')
+        var icon = document.getElementById('btn-icon')
+
+        if(div.style.display === "none"){
+            div.style.display = "block"
+            icon.classList.remove("fa-arrow-down")
+            icon.classList.add("fa-arrow-up")
+        }else{
+            div.style.display = "none"
+            icon.classList.remove("fa-arrow-up")
+            icon.classList.add("fa-arrow-down")
+        }
     });
 });
 </script>

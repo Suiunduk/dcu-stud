@@ -20,6 +20,18 @@
     <orderEntry type="library" name="jquery-3.5.1.slim" level="application" />
     <orderEntry type="library" name="popper.js" level="application" />
     <orderEntry type="library" name="datatables" level="application" />
+    <orderEntry type="library" name="buttons.colVis" level="application" />
+    <orderEntry type="library" name="dataTables.buttons" level="application" />
+    <orderEntry type="library" name="dataTables.colReorder" level="application" />
+    <orderEntry type="library" name="buttons.html5" level="application" />
+    <orderEntry type="library" name="pdfmake" level="application" />
+    <orderEntry type="library" name="buttons.print" level="application" />
+    <orderEntry type="library" name="buttons.dataTables" level="application" />
+    <orderEntry type="library" name="jszip" level="application" />
+    <orderEntry type="library" name="dataTables.select" level="application" />
+    <orderEntry type="library" name="jquery-1.12.4" level="application" />
+    <orderEntry type="library" name="jquery.dataTables" level="application" />
+    <orderEntry type="library" name="jquery-3.5.1" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

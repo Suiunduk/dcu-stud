@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>{{ name | default:"Управление пользователями" }}</title>
+  <title>{% block pagename %}{% endblock pagename %}</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
@@ -16,18 +16,19 @@
   <link rel="stylesheet"
     href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
 
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"></script>
     <link
         rel="stylesheet"
         type="text/css"
         href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.0.1/js/buttons.html5.styles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.0.1/js/buttons.html5.styles.templates.min.js"></script>
     <script
         type="text/javascript"
         src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.js"
     ></script>
-
 
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">

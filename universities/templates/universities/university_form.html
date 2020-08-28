@@ -1,6 +1,12 @@
 {% extends 'core/base.html' %}
 
-
+{% block pagename %}
+  {% if object %}
+    Обновление информации о ВУЗе
+  {% else %}
+    Добавление нового ВУЗа
+  {% endif %}
+{% endblock pagename %}
 {% block title %}
 
   {% if object %}

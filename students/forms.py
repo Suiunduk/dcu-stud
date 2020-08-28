@@ -67,9 +67,9 @@ class StudentSignUpForm(UserCreationForm):
     parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
     parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
     parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100, required=False)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE, required=False)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100, required=False)
+    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
+    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
+    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -129,9 +129,9 @@ class StudentCreateForm(UserCreationForm):
     parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
     parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
     parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100, required=False)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE, required=False)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100, required=False)
+    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
+    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
+    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -166,8 +166,7 @@ class StudentCreateForm(UserCreationForm):
                                          parent_phone_number=self.cleaned_data.get('parent_phone_number'),
                                          parent_second_name=self.cleaned_data.get('parent_second_name'),
                                          parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                         parent_second_phone_number=self.cleaned_data.get(
-                                             'parent_second_phone_number'))
+                                         parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'))
         return user
 
 
@@ -191,9 +190,9 @@ class StudentUpdateForm(forms.ModelForm):
     parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
     parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
     parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100, required=False)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE, required=False)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100, required=False)
+    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
+    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
+    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
 
     class Meta:
         model = Student

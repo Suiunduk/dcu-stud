@@ -30,9 +30,9 @@ class Student(models.Model):
     parent_name = models.CharField('ФИО родственника', max_length=255)
     parent_type = models.CharField('Степень родства', max_length=255)
     parent_phone_number = models.CharField('Телефонные номера', max_length=255)
-    parent_second_name = models.CharField('ФИО второго родственника', max_length=255, blank=True)
-    parent_second_type = models.CharField('Степень родства', max_length=255, blank=True)
-    parent_second_phone_number = models.CharField('Телефонные номера', max_length=255, blank=True)
+    parent_second_name = models.CharField('ФИО второго родственника', max_length=255)
+    parent_second_type = models.CharField('Степень родства', max_length=255)
+    parent_second_phone_number = models.CharField('Телефонные номера', max_length=255)
 
 
     class Meta:

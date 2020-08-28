@@ -10,7 +10,13 @@
   {% endif %}
 
 {% endblock title %}
-
+{% block pagename %}
+      {% if object %}
+        Изменение данных о студенте
+      {% else %}
+        Добавление нового студента
+      {% endif %}
+{% endblock pagename %}
 
 {% block content %}
 

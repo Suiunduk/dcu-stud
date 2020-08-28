@@ -1,6 +1,12 @@
 {% extends 'core/base.html' %}
 
-
+{% block pagename %}
+  {% if object %}
+    Обновление информации о сотруднике
+  {% else %}
+    Добавление нового сотрудника
+  {% endif %}
+{% endblock pagename %}
 {% block title %}
 
   {% if object %}
