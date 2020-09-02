@@ -4,6 +4,15 @@
 {% block content-header %}
 <div class="card-header">
   <div class="card-tools">
+    {% if  user.is_authenticated and user.is_student%}
+        <a class="btn btn-tool" href="{% url 'change_password' %}"><i class="fas fa-edit"></i>
+            Изменить пароль
+        </a>
+        <a href="{% url 'student-update' object.user_id %}" class="btn btn-tool"><i class="fas fa-user-edit"></i>
+            Изменить данные
+        </a>
+    {% endif %}
+
     {% if  user.is_authenticated and user.is_superuser or user.is_employee%}
         <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
             <i class="fas fa-print"></i>

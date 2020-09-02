@@ -245,7 +245,7 @@ class StudentUpdateForm(forms.ModelForm):
     fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
     date_of_birth = forms.DateField(label='Дата рождения')
     gender = forms.ChoiceField(label='Пол', choices=GENDER)
-    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities)
+    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities, disabled=True)
     last_school = forms.CharField(label='Предыдущая школа', max_length=100, required=False)
     education_country = forms.CharField(label='Страна обучения', max_length=100)
     university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=220)

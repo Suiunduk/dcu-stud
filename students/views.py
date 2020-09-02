@@ -106,7 +106,6 @@ def student_list(request):
     return render(request, 'students/student_list.html', {"students": students, "employee": employee})
 
 
-@method_decorator([login_required, super_or_emp_required], name='dispatch')
 class StudentDetailView(LoginRequiredMixin, DetailView):
     model = Student
     template_name = "students/student_detail.html"
@@ -135,17 +134,6 @@ class StudentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class StudentDeleteView(LoginRequiredMixin, DeleteView):
     model = Student
     success_url = reverse_lazy('student-list')
-
-
-@method_decorator([login_required, student_required], name='dispatch')
-class StudentProfileView(LoginRequiredMixin, DetailView):
-    model = Student
-    template_name = "students/student_profile.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(StudentProfileView, self).get_context_data(**kwargs)
-        context['documents'] = StudentDocuments.objects.filter(student=self.kwargs['pk'])
-        return context
 
 
 @student_required
@@ -220,11 +208,7 @@ class DocumentUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         student = Student.objects.get(user_id=self.kwargs['pk'])
         form.student = student
         user = form.save()
-        customUser = CustomUser.objects.get(id=self.kwargs['pk'])
-        if customUser.is_employee or customUser.is_superuser:
-            return redirect('student-detail', student.user_id)
-        else:
-            return redirect('student-profile', student.user_id)
+        return redirect('student-detail', student.user_id)
 
 
 class DocumentDetailView(LoginRequiredMixin, DetailView):
@@ -240,7 +224,6 @@ class DocumentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = StudentDocuments
     fields = ['name', 'description', 'file', ]
     success_message = "Документ успешно обновлен"
-    success_url = '/'
 
     def get_form(self, **kwargs):
         form = super(DocumentUpdateView, self).get_form()
@@ -250,15 +233,8 @@ class DocumentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 def document_delete(request, pk):
     user = request.user
     customUser = CustomUser.objects.get(pk=user.id)
-    if customUser.is_employee or customUser.is_superuser:
-        if request.method == 'POST':
-            document = StudentDocuments.objects.get(id=pk)
-            student = document.student
-            document.delete()
-        return redirect('student-detail', student.user_id)
-    if customUser.student:
-        if request.method == 'POST':
-            document = StudentDocuments.objects.get(id=pk)
-            student = document.student
-            document.delete()
-        return redirect('student-profile', student.user_id)
+    if request.method == 'POST':
+        document = StudentDocuments.objects.get(id=pk)
+        student = document.student
+        document.delete()
+    return redirect('student-detail', student.user_id)
