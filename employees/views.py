@@ -9,6 +9,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 
 from employees.forms import EmployeeSignUpForm, EmployeeCreateForm, EmployeeUpdateForm
 from employees.models import Employee
+from universities.models import University
 from users.models import CustomUser
 from core.decorators import superuser_required, super_or_emp_required
 
@@ -44,6 +45,8 @@ class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return form
 
     def form_valid(self, form):
+        university = University.objects.get(id=self.kwargs['fk'])
+        form.university = university
         user = form.save()
         return redirect('employee-detail', user.id)
 

@@ -3,19 +3,47 @@
 {% block title %}Список зарегистрированных в системе студентов{% endblock title %}
 
 {% block breadcrumb %}
-<a class="btn btn-primary" href="{% url 'student-create' %}"><i
-    class="fas fa-plus"></i> Добавить</a>
+{% if  user.is_authenticated and user.is_superuser%}
+    <a class="btn btn-primary" href="{% url 'student-create' %}"><i
+        class="fas fa-plus"></i> Добавить</a>
+{% endif %}
+{% if  user.is_authenticated and user.is_employee%}
+    <a class="btn btn-primary" href="{% url 'student-create-emp' employee.university.id %}"><i
+        class="fas fa-plus"></i> Добавить</a>
+{% endif %}
 {% endblock breadcrumb %}
 
 {% block content %}
 <button class="btn btn-secondary" id="show-btn" style="margin-bottom: 10px"> Показать/Скрыть столбцы <i class="fas fa-arrow-down" id="btn-icon"></i></button>
 <div class="list_view border-danger" id="checkboxes" style="display: none">
-  <label class="form-control" for="1"><input  type="checkbox" name="list" data-target ="1" value="Ф.И.О" id="1" checked> Ф.И.О</label>
-  <label class="form-control" for="2"><input type="checkbox" name="list" data-target ="2" value="E-mail" id="2"  checked> E-mail</label>
-  <label class="form-control" for="3"><input type="checkbox" name="list" data-target ="3" value="Страна обучения" id="3"  checked> Страна обучения</label>
-  <label class="form-control" for="4"><input type="checkbox" name="list" data-target ="4"  value="Пол" id="4"  checked> Пол</label>
-  <label class="form-control" for="5"><input type="checkbox" name="list" data-target ="5"  value="Номер телефона" id="5"  checked> Номер телефона</label>
-  <label class="form-control" for="6"><input type="checkbox" name="list" data-target ="6"  value="Статус" id="6"  checked> Статус</label>
+<div class="row">
+    <div class="col-md-3">
+        <label class="form-control" for="1"><input  type="checkbox" name="list" data-target ="1" value="Ф.И.О" id="1" checked> Ф.И.О</label>
+        <label class="form-control" for="2"><input  type="checkbox" name="list" data-target ="2" value="Дата рождения" id="2"> Дата рождения</label>
+        <label class="form-control" for="3"><input  type="checkbox" name="list" data-target ="3" value="Пол" id="3" checked> Пол</label>
+        <label class="form-control" for="4"><input  type="checkbox" name="list" data-target ="4" value="Предыдущий ВУЗ" id="4" checked> Предыдущий ВУЗ</label>
+        <label class="form-control" for="5"><input  type="checkbox" name="list" data-target ="5" value="Предыдущая школа" id="5"> Предыдущая школа</label>
+    </div>
+    <div class="col-md-3">
+        <label class="form-control" for="6"><input  type="checkbox" name="list" data-target ="6" value="Страна обучения" id="6" checked> Страна обучения</label>
+        <label class="form-control" for="7"><input  type="checkbox" name="list" data-target ="7" value="Зарубежное место обучения" id="7"> Зарубежное место обучения</label>
+        <label class="form-control" for="8"><input  type="checkbox" name="list" data-target ="8" value="Год поступления" id="8"> Год поступления</label>
+        <label class="form-control" for="9"><input  type="checkbox" name="list" data-target ="9" value="Программа обучения" id="9"> Программа обучения</label>
+    </div>
+    <div class="col-md-3">
+        <label class="form-control" for="10"><input  type="checkbox" name="list" data-target ="10" value="Период обучения" id="10"> Период обучения</label>
+        <label class="form-control" for="11"><input  type="checkbox" name="list" data-target ="11" value="Специальность" id="11" checked> Специальность</label>
+        <label class="form-control" for="12"><input  type="checkbox" name="list" data-target ="12" value="Форма обучения" id="12"> Форма обучения</label>
+        <label class="form-control" for="13"><input  type="checkbox" name="list" data-target ="13" value="Статус" id="13" checked> Статус</label>
+    </div>
+    <div class="col-md-3">
+        <label class="form-control" for="14"><input  type="checkbox" name="list" data-target ="14" value="Номер телефона" id="14" checked> Номер телефона</label>
+        <label class="form-control" for="15"><input  type="checkbox" name="list" data-target ="15" value="E-mail" id="15" checked> E-mail</label>
+        <label class="form-control" for="16"><input  type="checkbox" name="list" data-target ="16" value="Данные о первом родственнике" id="16"> Данные о первом родственнике</label>
+        <label class="form-control" for="17"><input  type="checkbox" name="list" data-target ="17" value="Данные о втором родственнике" id="17"> Данные о втором родственнике</label>
+    </div>
+</div>
+
 </div>
 
   <table id="studenttable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
@@ -23,24 +51,47 @@
       <tr>
         <th>№</th>
         <th>Ф.И.О.</th>
-        <th>E-mail</th>
-        <th>Страна обучения</th>
+        <th>Дата рождения</th>
         <th>Пол</th>
-        <th>Номер телефона</th>
+        <th>Предыдущий ВУЗ</th>
+        <th>Предыдущая школа</th>
+        <th>Страна обучения</th>
+        <th>Зарубежное место обучения</th>
+        <th>Год поступления</th>
+        <th>Программа обучения</th>
+        <th>Период обучения</th>
+        <th>Специальность</th>
+        <th>Форма обучения</th>
         <th>Статус</th>
+        <th>Номер телефона</th>
+        <th>E-mail</th>
+        <th>Данные о первом родственнике</th>
+        <th>Данные о втором родственнике</th>
       </tr>
     </thead>
     <tbody>
 
       {% for student in students %}
         <tr class='clickable-row' data-href="{% url  'student-detail' student.user_id %}">
-          <td>{{ forloop.counter}}</td>
-          <td>{{ student.lastname}} {{student.firstname }} {{student.fathersname }}</td>
-          <td>{{ student.email}}</td>
-          <td>{{ student.education_country}}</td>
-          <td>{{ student.gender}}</td>
-          <td>{{ student.phone_number}}</td>
-          <td>{{ student.status}}</td>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ student.lastname }} {{student.firstname }} {{student.fathersname }}</td>
+          <td>{{ student.date_of_birth }}</td>
+          <td>{{ student.gender }}</td>
+          <td>{{ student.university }}</td>
+          <td>{{ student.last_school }}</td>
+          <td>{{ student.education_country }}</td>
+          <td>{{ student.university_name }}</td>
+          <td>{{ student.year_of_applying }}</td>
+          <td>{{ student.education_program }}</td>
+          <td>{{ student.education_period }}</td>
+          <td>{{ student.speciality }}</td>
+          <td>{{ student.education_form }}</td>
+          <td>{{ student.status }}</td>
+          <td>{{ student.phone_number }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.parent_name }}, {{ student.parent_type }}, {{ student.parent_phone_number }}</td>
+          <td>{{ student.parent_second_name }}, {{ student.parent_second_type }}, {{ student.parent_second_phone_number }}</td>
+
         </tr>
       {% endfor %}
 
@@ -53,6 +104,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+    /** Создаем поисковые поля для каждого столбца*/
     $('#studenttable thead tr').clone(true).appendTo( '#studenttable thead' );
     $('#studenttable thead tr:eq(1) th').each( function (i) {
         var title = $(this).text();
@@ -71,10 +123,17 @@ $(document).ready(function () {
         /*}*/
     } );
 
+    /** Создаем DataTable*/
     var table = $('#studenttable').DataTable({
         orderCellsTop: true,
+        paging: false,
         fixedHeader: true,
         dom: 'Bfrtip',
+        /**Задаем по умолчанию невидимые столбцы*/
+        columnDefs : [
+            //hide the second & fourth column
+            { 'visible': false, 'targets': [2, 5, 7, 8, 9, 10, 12, 16,17] }
+        ],
         buttons: [
             {
                 extend: 'excelHtml5',
@@ -87,52 +146,24 @@ $(document).ready(function () {
                 extend: 'pdfHtml5',
                 text: 'Выгрузить в PDF',
                 exportOptions: {
-                    columns: ':visible'
-                }
+                    columns: ':visible',
+                },
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
             }
         ],
         "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
         "scrollX": true
-        /*initComplete: function () {
-            this.api().columns().every(function () {
-                const column = this;
-
-                if (column.index() == 1 || column.index() == 2 || column.index() == 5) {
-
-                    input = $('<input type="text" class="form-control"/>').appendTo($(column.header())).on('keyup change', function () {
-                        if (column.search() !== this.value) {
-                            column.search(this.value)
-                                .draw();
-                        }
-                    });
-                    return;
-                }
-
-                var select = $('<select class="form-control"><option value=""></option></select>')
-                    .appendTo($("#filters").find("th").eq(column.index()))
-                    .on('change', function () {
-                    var val = $.fn.dataTable.util.escapeRegex(
-                    $(this).val());
-
-                    column.search(val ? '^' + val + '$' : '', true, false)
-                        .draw();
-                });
-
-                console.log(select);
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
-        },*/
     });
 
+    /** Функция работающая при смене галочек*/
     $('.list_view input[type="checkbox"]').on('change', function(e) {
         // Get the column API object
         var col = table.column($(this).attr('data-target'));
         // Toggle the visibility
         col.visible(!col.visible());
     });
+    /** Функция для кнопки скрыть/показать столбцы */
     $(document).on('click', '#show-btn', function(e) {
         var div = document.getElementById('checkboxes')
         var icon = document.getElementById('btn-icon')

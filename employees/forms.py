@@ -45,7 +45,7 @@ class EmployeeCreateForm(UserCreationForm):
     fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
     phone_number = forms.CharField(label='Номер телефона', max_length=20)
     email = forms.EmailField(label='Email')
-    university = forms.ModelChoiceField(label='Университет', widget=forms.Select, queryset=universities, required=False)
+    university = forms.HiddenInput()
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -63,7 +63,7 @@ class EmployeeCreateForm(UserCreationForm):
                                            fathersname=self.cleaned_data.get('fathersname'),
                                            phone_number=self.cleaned_data.get('phone_number'),
                                            email=self.cleaned_data.get('email'),
-                                           university=self.cleaned_data.get('university'))
+                                           university=self.university)
         return user
 
 

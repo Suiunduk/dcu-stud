@@ -5,17 +5,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail, BadHeaderError
 from django.forms import widgets
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView
 from core.decorators import employee_required, superuser_required, super_or_emp_required, student_required
 from dcu import settings
 from dcu.resources import StudentResource
 from employees.models import Employee
-from students.forms import StudentSignUpForm, StudentCreateForm, StudentUpdateForm, ContactForm
-from students.models import Student
+from students.forms import StudentSignUpForm, StudentCreateForm, StudentUpdateForm, ContactForm, \
+    StudentCreateFormForEmp, DocumentUploadForm
+from students.models import Student, StudentDocuments
+from universities.models import University
 from users.models import CustomUser
 
 
@@ -42,7 +44,7 @@ class StudentSignUpView(CreateView):
         return redirect('homepage')
 
 
-@method_decorator([login_required, super_or_emp_required], name='dispatch')
+@method_decorator([login_required, superuser_required], name='dispatch')
 class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = CustomUser
     form_class = StudentCreateForm
@@ -66,24 +68,52 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return redirect('student-detail', user.id)
 
 
+@method_decorator([login_required, employee_required()], name='dispatch')
+class StudentCreateViewForEmp(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = CustomUser
+    form_class = StudentCreateFormForEmp
+    template_name = 'students/student_form.html'
+    success_message = "Новый студент успешно добавлен"
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def get_form(self, **kwargs):
+        form = super(StudentCreateViewForEmp, self).get_form()
+        form.fields['date_of_birth'].widget = widgets.DateInput(
+            attrs={'type': 'date'})
+        form.fields['year_of_applying'].widget = widgets.DateInput(
+            attrs={'type': 'date'})
+        return form
+
+    def form_valid(self, form):
+        form.university = University.objects.get(id=self.kwargs['fk'])
+        user = form.save()
+        return redirect('student-detail', user.id)
+
+
 @super_or_emp_required
 def student_list(request):
     user = request.user
     customUser = CustomUser.objects.get(pk=user.id)
+    employee = None
     if customUser.is_employee:
         employee = Employee.objects.get(pk=user.id)
         students = Student.objects.filter(university=employee.university)
     else:
         students = Student.objects.all()
-    return render(request, 'students/student_list.html', {"students": students})
+    return render(request, 'students/student_list.html', {"students": students, "employee": employee})
 
 
+@method_decorator([login_required, super_or_emp_required], name='dispatch')
 class StudentDetailView(LoginRequiredMixin, DetailView):
     model = Student
     template_name = "students/student_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(StudentDetailView, self).get_context_data(**kwargs)
+        context['documents'] = StudentDocuments.objects.filter(student=self.kwargs['pk'])
         return context
 
 
@@ -94,6 +124,10 @@ class StudentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_form(self, **kwargs):
         form = super(StudentUpdateView, self).get_form()
+        form.fields['date_of_birth'].widget = widgets.DateInput(format='%Y-%m-%d',
+                                                                attrs={'type': 'date'})
+        form.fields['year_of_applying'].widget = widgets.DateInput(format='%Y-%m-%d',
+                                                                   attrs={'type': 'date'})
         return form
 
 
@@ -110,6 +144,7 @@ class StudentProfileView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(StudentProfileView, self).get_context_data(**kwargs)
+        context['documents'] = StudentDocuments.objects.filter(student=self.kwargs['pk'])
         return context
 
 
@@ -170,3 +205,60 @@ def export_data(request):
             return response
 
     return render(request, 'students/students_export.html')
+
+
+class DocumentUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = StudentDocuments
+    form_class = DocumentUploadForm
+    success_message = "Документ добавлен успешно"
+
+    def get_form(self, **kwargs):
+        form = super(DocumentUploadView, self).get_form()
+        return form
+
+    def form_valid(self, form):
+        student = Student.objects.get(user_id=self.kwargs['pk'])
+        form.student = student
+        user = form.save()
+        customUser = CustomUser.objects.get(id=self.kwargs['pk'])
+        if customUser.is_employee or customUser.is_superuser:
+            return redirect('student-detail', student.user_id)
+        else:
+            return redirect('student-profile', student.user_id)
+
+
+class DocumentDetailView(LoginRequiredMixin, DetailView):
+    model = StudentDocuments
+    template_name = "students/document_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentDetailView, self).get_context_data(**kwargs)
+        return context
+
+
+class DocumentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = StudentDocuments
+    fields = ['name', 'description', 'file', ]
+    success_message = "Документ успешно обновлен"
+    success_url = '/'
+
+    def get_form(self, **kwargs):
+        form = super(DocumentUpdateView, self).get_form()
+        return form
+
+
+def document_delete(request, pk):
+    user = request.user
+    customUser = CustomUser.objects.get(pk=user.id)
+    if customUser.is_employee or customUser.is_superuser:
+        if request.method == 'POST':
+            document = StudentDocuments.objects.get(id=pk)
+            student = document.student
+            document.delete()
+        return redirect('student-detail', student.user_id)
+    if customUser.student:
+        if request.method == 'POST':
+            document = StudentDocuments.objects.get(id=pk)
+            student = document.student
+            document.delete()
+        return redirect('student-profile', student.user_id)

@@ -34,7 +34,7 @@
     </div>
     <!-- /.login-logo -->
     <div class="card">
-      <div class="card-body login-card-body text-center">
+      <div class="card-body card-primary login-card-body text-center">
         <p class="login-box-msg">Регистрация нового студента</p>
 
         {% if form.errors %}
@@ -86,14 +86,10 @@
             </tr>
             <tr class="mb-2">
               <td><h6>Предыдущее образование:</h6></td>
-              <td>{{ form.last_edu | add_class:"form-control"}}</td>
-            </tr>
-            <tr class="mb-2">
-              <td><h6>Предыдущий ВУЗ:</h6></td>
               <td>{{ form.university | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
-              <td><h6>Другое место обучения:</h6></td>
+              <td><h6>Предыдущая школа:</h6></td>
               <td>{{ form.last_education_place | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
@@ -101,7 +97,7 @@
               <td>{{ form.education_country | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
-              <td><h6>Название университета:</h6></td>
+              <td><h6>Название зарубежгого учебного заведения:</h6></td>
               <td>{{ form.university_name | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
@@ -129,7 +125,7 @@
               <td>{{ form.status | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
-              <td><h6>Телефонный номер:</h6></td>
+              <td><h6>Номер телефона:</h6></td>
               <td>{{ form.phone_number | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
@@ -145,7 +141,7 @@
               <td>{{ form.parent_phone_number | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">
-              <td><h6>ФИО одного из родственников:</h6></td>
+              <td><h6>ФИО ещё одного родственника:</h6></td>
               <td>{{ form.parent_second_name | add_class:"form-control"}}</td>
             </tr>
             <tr class="mb-2">

@@ -17,8 +17,18 @@
 
 {% block content %}
     <div class="row mb-4">
-      <div class="col-sm-4">
+      <div class="col-sm-4 border-right">
         <div class="row mb-2">
+
+          {% if object.profile_photo %}
+            <img
+              src="{{ object.profile_photo.url }}"
+              class="float-left rounded-circle border mr-3" style="width: 150px; height: 150px; object-fit: cover; ">
+          {% else %}
+            <img
+              src="{% static 'dist/img/avatar.png' %}"
+              class="float-left rounded-circle border mr-3" style="width: 150px; height: 150px;">
+          {% endif %}
 
           <div class="float-right">
             <h4>{{ object.lastname }} </h4>
@@ -35,6 +45,10 @@
       </div>
       <div class="col-sm-8">
         <div>
+          <div class="form-group row">
+              <h3 class="ml-5">Личные данные студента</h3>
+          </div>
+
           <div class="form-group border-bottom row">
             <label class="col">
               Дата рождения
@@ -57,11 +71,11 @@
             <label class="col">
               Предыдущее место обучения
             </label>
-            <div class="col">
+            <div class="col border-right">
               {{ object.university}}
             </div>
             <div class="col">
-              {{ object.last_education_place}}
+              {{ object.last_school}}
             </div>
           </div>
 
@@ -128,10 +142,91 @@
             </div>
           </div>
 
-        </div>
+          <div class="form-group row">
+              <h3 class="ml-5">Контактные данные родственников</h3>
+          </div>
 
+          <div class="form-group border-bottom row">
+            <label class="col">
+              {{ object.parent_type }}
+            </label>
+            <div class="col">
+              {{ object.parent_name }}, {{ object.parent_phone_number }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              {{ object.parent_second_type }}
+            </label>
+            <div class="col">
+              {{ object.parent_second_name }}, {{ object.parent_second_phone_number }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <h4>Список прикрепленных документов студента:</h4>
+    <div class="card-header">
+      <div class="card-tools">
+            <a href="{% url 'document-upload' object.user_id %}" class="btn btn-tool">
+              <i class="fas fa-file"></i>
+              Добавить документ
+            </a>
+      </div>
+    </div>
+    <div>
+             <table id="documentstable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+                <thead class="thead-light">
+                  <tr>
+                    <th>№</th>
+                    <th>Наименование</th>
+                    <th>Добавлено</th>
+                    <th>Обновлено</th>
+                    <th>Скачать</th>
+                    <th>Удалить</th>
 
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for document in documents %}
+                    <tr class='clickable-row' data-href="{% url 'document-detail' document.id %}">
+                      <td>{{ forloop.counter}}</td>
+                      <td>{{ document.name}}</td>
+                      <td>{{ document.document_file_created_at}}</td>
+                      <td>{{ document.document_file_updated_at}}</td>
+                      <td>
+                          <a class="btn btn-primary" href="{{ document.file.url }}">Скачать</a>
+                      </td>
+                    <td>
+                          <form method="post" action="{% url 'document-delete' document.id %}">
+                              {% csrf_token %}
+                              <button class="btn btn-danger" type="submit">Удалить</button>
+                          </form>
+                      </td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+          </div>
 
 {% endblock content %}
+{% block morejs %}
+    <script>
+
+    $('#documentstable').DataTable({
+        "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true,
+        searching: false,
+        ordering: false,
+        paging: false
+    });
+
+    function print_preview() {
+        // Print the page
+        window.print();
+    }
+    </script>
+{% endblock morejs %}

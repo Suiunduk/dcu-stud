@@ -4,12 +4,17 @@
 {% block content-header %}
 <div class="card-header">
   <div class="card-tools">
-    <a href="#" class="btn btn-tool">Print</a>
+    <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
+        <i class="fas fa-print"></i>
+        Печать
+    </a>
     <a href="{% url 'university-update' object.id %}" class="btn btn-tool">
       <i class="fas fa-edit"></i>
+      Изменить данные
     </a>
     <a href="{% url 'university-delete' object.id %}" class="btn btn-tool">
-      <i class="fas fa-times"></i>
+      <i class="fas fa-trash-alt"></i>
+      Удалить учебное заведение
     </a>
   </div>
 </div>
@@ -79,5 +84,9 @@
         "scrollX": true
     });
 
+    function print_preview() {
+        // Print the page
+        window.print();
+    }
 </script>
 {% endblock morejs %}
