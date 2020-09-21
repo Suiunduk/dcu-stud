@@ -1,3 +1,6 @@
+import csv
+
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from django.contrib.auth.decorators import login_required
@@ -9,7 +12,8 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
 from employees.models import Employee
-from universities.models import University
+from universities.models import University, UniversityBulkUpload
+
 
 @login_required
 def university_list(request):
@@ -50,3 +54,22 @@ class UniversityUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class UniversityDeleteView(LoginRequiredMixin, DeleteView):
     model = University
     success_url = reverse_lazy('universities-list')
+
+
+class UniversityBulkUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = UniversityBulkUpload
+    template_name = 'universities/universities_upload.html'
+    fields = ['csv_file']
+    success_url = '/universities/list'
+    success_message = 'Университеты успешно добавлены'
+
+
+@login_required
+def downloadcsv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="university_template.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['university_name', 'university_address'])
+
+    return response

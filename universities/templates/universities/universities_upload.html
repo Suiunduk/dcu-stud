@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  Импортирование данных из файла
+{% endblock title %}
+
+
+{% block content %}
+
+  <div class="col alert alert-info">
+    <h5>Инструкция</h5>
+    <p>Пожалуйста <a href="{% url 'download-csv' %}">скачайте прикрепленный здесь CSV файл </a>. Заполните файл и загрузите его обратно. НЕ РЕДАКТИРУЙТЕ ПЕРВУЮ СТРОКУ!</p>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include 'core/form_snippet.html' %}
+
+    <input type="submit" class="btn btn-success" value="Импорт">
+  </form>
+
+{% endblock content %}

@@ -16,6 +16,7 @@ class Student(models.Model):
     gender = models.CharField(max_length=10, default='Мужской')
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     last_school = models.CharField(max_length=255, blank=True)
+    type_of_applying = models.CharField(max_length=255, default='по линии межвузовских Соглашений')
     education_country = models.CharField(max_length=255)
     university_name = models.CharField(max_length=255)
     year_of_applying = models.DateField(default=timezone.now)
@@ -45,6 +46,7 @@ class Student(models.Model):
 
     def delete(self, *args, **kwargs):
         self.user.delete()
+        self.profile_photo.delete()
         return super(self.__class__, self).delete(*args, **kwargs)
 
 
@@ -52,7 +54,7 @@ class StudentDocuments(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     file = models.FileField(upload_to='students/student_documents/')
-    student = models.ForeignKey(Student, on_delete=models.CheckConstraint)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     document_file_created_at = models.DateTimeField(auto_now_add=True)
     document_file_updated_at = models.DateTimeField(auto_now=True)
 

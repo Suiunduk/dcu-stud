@@ -20,6 +20,14 @@ from students.models import Student, StudentDocuments
 from universities.models import University
 from users.models import CustomUser
 
+from bootstrap_modal_forms.generic import (
+    BSModalLoginView,
+    BSModalCreateView,
+    BSModalUpdateView,
+    BSModalReadView,
+    BSModalDeleteView
+)
+
 
 class StudentSignUpView(CreateView):
     model = CustomUser

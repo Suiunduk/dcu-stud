@@ -55,6 +55,7 @@
                   <tr>
                     <th>№</th>
                     <th>Ф.И.О.</th>
+                    <th>Должность</th>
                     <th>E-mail</th>
                     <th>Номер телефона</th>
                   </tr>
@@ -65,6 +66,7 @@
                     <tr class='clickable-row' data-href="{% url  'employee-detail' employee.user_id %}">
                       <td>{{ forloop.counter}}</td>
                       <td>{{ employee.lastname}} {{employee.firstname }} {{employee.fathersname }}</td>
+                      <td>{{ employee.position}}</td>
                       <td>{{ employee.email}}</td>
                       <td>{{ employee.phone_number}}</td>
                     </tr>
@@ -81,7 +83,10 @@
 
     $('#employeetable').DataTable({
         "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
-        "scrollX": true
+        "scrollX": true,
+        searching: false,
+        ordering: false,
+        paging: false
     });
 
     function print_preview() {

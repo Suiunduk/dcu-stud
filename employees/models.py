@@ -8,11 +8,12 @@ from users.models import CustomUser
 class Employee(models.Model):
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-    lastname = models.CharField('Фамилия', max_length=255)
-    firstname = models.CharField('Имя', max_length=255)
-    fathersname = models.CharField('Отчество', max_length=255, blank=True)
-    phone_number = models.CharField('Номер телефона', max_length=255, unique=True)
-    email = models.CharField('E-mail', max_length=255, unique=True)
+    lastname = models.CharField(max_length=255)
+    firstname = models.CharField(max_length=255)
+    fathersname = models.CharField(max_length=255, blank=True)
+    position = models.CharField(max_length=255, default='Сотрудник')
+    phone_number = models.CharField(max_length=255, unique=True)
+    email = models.CharField(max_length=255, unique=True)
     university = models.ForeignKey(University, on_delete=models.CASCADE)
 
     class Meta:

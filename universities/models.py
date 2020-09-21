@@ -13,3 +13,8 @@ class University(models.Model):
 
     def get_absolute_url(self):
         return reverse('university-detail', kwargs={'pk': self.pk})
+
+
+class UniversityBulkUpload(models.Model):
+    date_uploaded = models.DateTimeField(auto_now=True)
+    csv_file = models.FileField(upload_to='students/bulkupload/')
