@@ -76,7 +76,7 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return redirect('student-detail', user.id)
 
 
-@method_decorator([login_required, employee_required()], name='dispatch')
+@method_decorator([login_required, employee_required], name='dispatch')
 class StudentCreateViewForEmp(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = CustomUser
     form_class = StudentCreateFormForEmp

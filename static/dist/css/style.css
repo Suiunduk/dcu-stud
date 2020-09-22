@@ -631,17 +631,17 @@ h6 {
   margin-bottom: 0;
 }
 
-#why-us {
+#statistics {
   padding: 60px 0;
   background: #004a99;
 }
 
-#why-us .section-header h3,
-#why-us .section-header p {
+#statistics .section-header h3,
+#statistics .section-header p {
   color: #fff;
 }
 
-#why-us .card {
+#statistics .card {
   background: #00458f;
   border-color: #00458f;
   border-radius: 10px;
@@ -653,28 +653,28 @@ h6 {
   height: 100%;
 }
 
-#why-us .card:hover {
+#statistics .card:hover {
   background: #003b7a;
   border-color: #003b7a;
 }
 
-#why-us .card i {
+#statistics .card i {
   font-size: 48px;
   padding-top: 15px;
   color: #bfddfe;
 }
 
-#why-us .card h5 {
+#statistics .card h5 {
   font-size: 22px;
   font-weight: 600;
 }
 
-#why-us .card p {
+#statistics .card p {
   font-size: 15px;
   color: #d8eafe;
 }
 
-#why-us .card .readmore {
+#statistics .card .readmore {
   color: #fff;
   font-weight: 600;
   display: inline-block;
@@ -682,15 +682,15 @@ h6 {
   border-bottom: #00458f solid 2px;
 }
 
-#why-us .card .readmore:hover {
+#statistics .card .readmore:hover {
   border-bottom: #fff solid 2px;
 }
 
-#why-us .counters {
+#statistics .counters {
   padding-top: 40px;
 }
 
-#why-us .counters span {
+#statistics .counters span {
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
   font-size: 48px;
@@ -698,7 +698,7 @@ h6 {
   color: #fff;
 }
 
-#why-us .counters p {
+#statistics .counters p {
   padding: 0;
   margin: 0 0 20px 0;
   font-family: "Montserrat", sans-serif;
@@ -1357,7 +1357,7 @@ h6 {
     text-align: center;
   }
 
-  #why-us .card {
+  #statistics .card {
     margin: 0;
   }
 }

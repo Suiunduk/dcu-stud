@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from universities.models import University
 
@@ -23,3 +24,5 @@ class Student_abroad(models.Model):
     def __str__(self):
         return f'{self.full_name}'
 
+    def get_absolute_url(self):
+        return reverse('student-abroad-detail', kwargs={'pk': self.pk})

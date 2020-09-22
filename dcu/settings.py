@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'universities',
     'core',
     'students',
+    'students_in_kg',
     'employees',
     'crispy_forms',
     'widget_tweaks',
