@@ -10,9 +10,12 @@ from django.forms import widgets
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from tablib import Dataset
+
 
 from employees.models import Employee
-from universities.models import University, UniversityBulkUpload
+from universities.models import University
+from universities.resources import UniversityResource
 
 
 @login_required
@@ -56,12 +59,12 @@ class UniversityDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('universities-list')
 
 
-class UniversityBulkUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = UniversityBulkUpload
-    template_name = 'universities/universities_upload.html'
-    fields = ['csv_file']
-    success_url = '/universities/list'
-    success_message = 'Университеты успешно добавлены'
+# class UniversityBulkUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+#     model = UniversityBulkUpload
+#     template_name = 'universities/universities_upload.html'
+#     fields = ['csv_file']
+#     success_url = '/universities/list'
+#     success_message = 'Университеты успешно добавлены'
 
 
 @login_required
@@ -73,3 +76,28 @@ def downloadcsv(request):
     writer.writerow(['university_name', 'university_address'])
 
     return response
+
+
+def simple_upload(request):
+    if request.method == 'POST':
+        university_resource = UniversityResource()
+        dataset = Dataset()
+        new_universities = request.FILES['myfile']
+
+        imported_data = dataset.load(new_universities.read(), format='xlsx')
+        print(imported_data)
+        for data in imported_data:
+            #print(data[1])
+            value = University(
+                data[0],
+                data[1],
+                data[2]
+            )
+            value.save()
+
+            # result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+
+        # if not result.has_errors():
+        #    person_resource.import_data(dataset, dry_run=False)  # Actually import now
+
+    return render(request, 'core/uni_upload.html')

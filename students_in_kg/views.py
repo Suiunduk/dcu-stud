@@ -7,11 +7,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from tablib import Dataset
 
 from core.decorators import superuser_required, employee_required, super_or_emp_required
 from employees.models import Employee
 from students_in_kg.forms import StudentAbroadCreateFormForEmp, StudentAbroadCreateForm
-from students_in_kg.models import Student_abroad, StudentBulkUpload
+from students_in_kg.models import Student_abroad
 from universities.models import University
 from users.models import CustomUser
 
@@ -93,17 +94,37 @@ class StudentDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('student-abroad-list')
 
 
-@method_decorator([login_required, employee_required], name='dispatch')
-class StudentBulkUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = StudentBulkUpload
-    template_name = 'students_in_kg/students_upload.html'
-    fields = ['xls_file']
-    success_url = '/students-abroad/list'
-    success_message = 'Successfully uploaded students'
+def student_upload(request):
+    if request.method == 'POST':
+        dataset = Dataset()
+        new_students = request.FILES['myfile']
+        employee = Employee.objects.get(pk=request.user.id)
+        university = employee.university
+        ethKyrg = False
+        imported_data = dataset.load(new_students.read(), format='xlsx')
+        print(imported_data)
+        for data in imported_data:
+            value = Student_abroad(
+                data[0],
+                data[1],
+                data[2],
+                ethKyrg,
+                data[4],
+                data[5],
+                university.id,
+                data[6],
+                data[7],
+                data[8],
+                data[9],
+                data[10],
+                data[11]
+            )
+            value.save()
 
-    def form_valid(self, form):
-        form_data = form.save()
-        xls = form_data.__str__()
-        book = xlrd.open_workbook(xls)
-        print(book.nsheets)
-        return redirect('student-abroad-list')
+            # result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+
+        # if not result.has_errors():
+        #    person_resource.import_data(dataset, dry_run=False)  # Actually import now
+
+    return render(request, 'core/uni_upload.html')
+
