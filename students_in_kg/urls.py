@@ -2,7 +2,7 @@ from django.urls import path, include
 
 from students_in_kg import views
 from students_in_kg.views import StudentDetailView, StudentCreateView, StudentCreateViewForEmp, StudentUpdateView, \
-    StudentDeleteView
+    StudentDeleteView, StudentBulkUploadView
 
 urlpatterns = [
     path('list', views.student_list, name='student-abroad-list'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('create/<int:fk>', StudentCreateViewForEmp.as_view(), name='student-abroad-create-emp'),
     path('<int:pk>/update/', StudentUpdateView.as_view(), name='student-abroad-update'),
     path('delete/<int:pk>/', StudentDeleteView.as_view(), name='student-abroad-delete'),
+    path('upload/', StudentBulkUploadView.as_view(), name='student-upload'),
 ]

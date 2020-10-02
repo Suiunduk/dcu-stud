@@ -1,3 +1,4 @@
+import xlrd
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -10,7 +11,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from core.decorators import superuser_required, employee_required, super_or_emp_required
 from employees.models import Employee
 from students_in_kg.forms import StudentAbroadCreateFormForEmp, StudentAbroadCreateForm
-from students_in_kg.models import Student_abroad
+from students_in_kg.models import Student_abroad, StudentBulkUpload
 from universities.models import University
 from users.models import CustomUser
 
@@ -90,3 +91,19 @@ class StudentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class StudentDeleteView(LoginRequiredMixin, DeleteView):
     model = Student_abroad
     success_url = reverse_lazy('student-abroad-list')
+
+
+@method_decorator([login_required, employee_required], name='dispatch')
+class StudentBulkUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = StudentBulkUpload
+    template_name = 'students_in_kg/students_upload.html'
+    fields = ['xls_file']
+    success_url = '/students-abroad/list'
+    success_message = 'Successfully uploaded students'
+
+    def form_valid(self, form):
+        form_data = form.save()
+        xls = form_data.__str__()
+        book = xlrd.open_workbook(xls)
+        print(book.nsheets)
+        return redirect('student-abroad-list')

@@ -48,6 +48,11 @@
   <link
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
     rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.17.1/dist/themes/semantic/bootstrap-table-semantic.min.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/themes/materialize/bootstrap-table-materialize.min.js"></script>
+
 </head>
 
 <body
@@ -89,7 +94,7 @@
                 </a>
             {% endif %}
             <div class="dropdown-divider"></div>
-            <a href="{% url 'logout' %}?next=/" class="dropdown-item">
+            <a href="{% url 'logout' %}" class="dropdown-item">
               <i class="fas fa-sign-out"></i> Выход
             </a>
           </div>
@@ -172,7 +177,7 @@
                       <li class="nav-item">
                         <a href="{% url 'student-abroad-list' %}" class="nav-link">
                           <i class="far fa-arrow-alt-circle-right nav-icon"></i>
-                          <p>Зарубежные студенты</p>
+                          <p>Иностранные студенты</p>
                         </a>
                       </li>
                     </ul>
@@ -285,7 +290,9 @@
   {% endif %}
 
   <script src="{% static 'plugins/DataTables/datatables.min.js' %}"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table-locale-all.min.js"></script>
   <script>
     (function ($) {
       $('.clickable-row').css('cursor', 'pointer');

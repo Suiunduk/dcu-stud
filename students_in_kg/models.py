@@ -26,3 +26,11 @@ class Student_abroad(models.Model):
 
     def get_absolute_url(self):
         return reverse('student-abroad-detail', kwargs={'pk': self.pk})
+
+
+class StudentBulkUpload(models.Model):
+    date_uploaded = models.DateTimeField(auto_now=True)
+    xls_file = models.FileField(upload_to='students/bulkupload/')
+
+    def __str__(self):
+        return self.xls_file
