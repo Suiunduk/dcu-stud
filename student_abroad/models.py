@@ -8,8 +8,6 @@ from university_local.models import University
 from users.models import CustomUser
 
 
-# class StudentCommon(models.Model):
-
 class StudentAbroad(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
 
@@ -41,7 +39,7 @@ class StudentAbroad(models.Model):
         ordering = ['lastname', 'firstname', 'fathersname']
 
     def __str__(self):
-        return f'{self.lastname} {self.firstname} {self.fathersname} ({self.phone_number})'
+        return f'{self.lastname} {self.firstname} {self.fathersname} ({self.email})'
 
     def get_absolute_url(self):
         return reverse('student-detail', kwargs={'pk': self.pk})
@@ -68,7 +66,7 @@ class StudentParent(models.Model):
     student = models.ForeignKey(ParentType, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.lastname} {self.firstname} {self.fathersname} ({self.phone_number})'
+        return f'{self.lastname} {self.firstname} {self.fathersname}'
 
 
 class StudentParentPhoneNumber(models.Model):
