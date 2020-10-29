@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block pagename %}Импортирование списка студентов{% endblock pagename %}
+
+{% block title %}
+  Импортирование списка студентов
+{% endblock title %}
+
+
+{% block content %}
+     <div class="col alert alert-info">
+        <h5>Инструкция</h5>
+        <p>Пожалуйста <a href="{% static 'template_files/student_template.xlsx'  %}">скачайте прикрепленный здесь EXCEL файл </a>. Заполните файл и загрузите его обратно. НЕ РЕДАКТИРУЙТЕ ПЕРВУЮ СТРОКУ!</p>
+     </div>
+      <form method="POST" style="display: block" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="myfile">
+        <button type="submit" class="btn btn-success">Загрузить</button>
+      </form>
+{% endblock content %}

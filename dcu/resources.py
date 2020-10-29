@@ -1,8 +1,8 @@
 from import_export import resources
 
-from students.models import Student
+from student_abroad.models import StudentAbroad
 
 
 class StudentResource(resources.ModelResource):
     class Meta:
-        model = Student
+        model = StudentAbroad
