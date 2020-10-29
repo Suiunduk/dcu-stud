@@ -4,7 +4,7 @@ from django.db import transaction
 from django.forms import modelformset_factory
 from django.forms.utils import ValidationError
 
-from student_abroad.models import StudentAbroad, StudentDocuments
+from student_abroad.models import StudentAbroadCommon, StudentDocuments
 from university_local.models import University
 from users.models import CustomUser
 
@@ -92,32 +92,32 @@ class StudentSignUpForm(UserCreationForm):
         user.is_student = True
         user.username = self.cleaned_data.get('email')
         user.save()
-        student = StudentAbroad.objects.create(user=user,
-                                               lastname=self.cleaned_data.get('lastname'),
-                                               firstname=self.cleaned_data.get('firstname'),
-                                               fathersname=self.cleaned_data.get('fathersname'),
-                                               date_of_birth=self.cleaned_data.get('date_of_birth'),
-                                               gender=self.cleaned_data.get('gender'),
-                                               university=self.cleaned_data.get('university'),
-                                               last_school=self.cleaned_data.get('last_school'),
-                                               type_of_applying=self.cleaned_data.get('type_of_applying'),
-                                               education_country=self.cleaned_data.get('education_country'),
-                                               university_name=self.cleaned_data.get('university_name'),
-                                               year_of_applying=self.cleaned_data.get('year_of_applying'),
-                                               education_program=self.cleaned_data.get('education_program'),
-                                               education_period=self.cleaned_data.get('education_period'),
-                                               speciality=self.cleaned_data.get('speciality'),
-                                               education_form=self.cleaned_data.get('education_form'),
-                                               status=self.cleaned_data.get('status'),
-                                               phone_number=self.cleaned_data.get('phone_number'),
-                                               email=self.cleaned_data.get('email'),
-                                               parent_name=self.cleaned_data.get('parent_name'),
-                                               parent_type=self.cleaned_data.get('parent_type'),
-                                               parent_phone_number=self.cleaned_data.get('parent_phone_number'),
-                                               parent_second_name=self.cleaned_data.get('parent_second_name'),
-                                               parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                               parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
-                                               profile_photo=self.cleaned_data.get('profile_photo'))
+        student = StudentAbroadCommon.objects.create(user=user,
+                                                     lastname=self.cleaned_data.get('lastname'),
+                                                     firstname=self.cleaned_data.get('firstname'),
+                                                     fathersname=self.cleaned_data.get('fathersname'),
+                                                     date_of_birth=self.cleaned_data.get('date_of_birth'),
+                                                     gender=self.cleaned_data.get('gender'),
+                                                     university=self.cleaned_data.get('university'),
+                                                     last_school=self.cleaned_data.get('last_school'),
+                                                     type_of_applying=self.cleaned_data.get('type_of_applying'),
+                                                     education_country=self.cleaned_data.get('education_country'),
+                                                     university_name=self.cleaned_data.get('university_name'),
+                                                     year_of_applying=self.cleaned_data.get('year_of_applying'),
+                                                     education_program=self.cleaned_data.get('education_program'),
+                                                     education_period=self.cleaned_data.get('education_period'),
+                                                     speciality=self.cleaned_data.get('speciality'),
+                                                     education_form=self.cleaned_data.get('education_form'),
+                                                     status=self.cleaned_data.get('status'),
+                                                     phone_number=self.cleaned_data.get('phone_number'),
+                                                     email=self.cleaned_data.get('email'),
+                                                     parent_name=self.cleaned_data.get('parent_name'),
+                                                     parent_type=self.cleaned_data.get('parent_type'),
+                                                     parent_phone_number=self.cleaned_data.get('parent_phone_number'),
+                                                     parent_second_name=self.cleaned_data.get('parent_second_name'),
+                                                     parent_second_type=self.cleaned_data.get('parent_second_type'),
+                                                     parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
+                                                     profile_photo=self.cleaned_data.get('profile_photo'))
         return user
 
 
@@ -158,32 +158,32 @@ class StudentCreateForm(UserCreationForm):
         user.is_student = True
         user.username = self.cleaned_data.get('email')
         user.save()
-        student = StudentAbroad.objects.create(user=user,
-                                               lastname=self.cleaned_data.get('lastname'),
-                                               firstname=self.cleaned_data.get('firstname'),
-                                               fathersname=self.cleaned_data.get('fathersname'),
-                                               date_of_birth=self.cleaned_data.get('date_of_birth'),
-                                               gender=self.cleaned_data.get('gender'),
-                                               university=self.cleaned_data.get('university'),
-                                               last_school=self.cleaned_data.get('last_school'),
-                                               type_of_applying=self.cleaned_data.get('type_of_applying'),
-                                               education_country=self.cleaned_data.get('education_country'),
-                                               university_name=self.cleaned_data.get('university_name'),
-                                               year_of_applying=self.cleaned_data.get('year_of_applying'),
-                                               education_program=self.cleaned_data.get('education_program'),
-                                               education_period=self.cleaned_data.get('education_period'),
-                                               speciality=self.cleaned_data.get('speciality'),
-                                               education_form=self.cleaned_data.get('education_form'),
-                                               status=self.cleaned_data.get('status'),
-                                               phone_number=self.cleaned_data.get('phone_number'),
-                                               email=self.cleaned_data.get('email'),
-                                               parent_name=self.cleaned_data.get('parent_name'),
-                                               parent_type=self.cleaned_data.get('parent_type'),
-                                               parent_phone_number=self.cleaned_data.get('parent_phone_number'),
-                                               parent_second_name=self.cleaned_data.get('parent_second_name'),
-                                               parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                               parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
-                                               profile_photo=self.cleaned_data.get('profile_photo'))
+        student = StudentAbroadCommon.objects.create(user=user,
+                                                     lastname=self.cleaned_data.get('lastname'),
+                                                     firstname=self.cleaned_data.get('firstname'),
+                                                     fathersname=self.cleaned_data.get('fathersname'),
+                                                     date_of_birth=self.cleaned_data.get('date_of_birth'),
+                                                     gender=self.cleaned_data.get('gender'),
+                                                     university=self.cleaned_data.get('university'),
+                                                     last_school=self.cleaned_data.get('last_school'),
+                                                     type_of_applying=self.cleaned_data.get('type_of_applying'),
+                                                     education_country=self.cleaned_data.get('education_country'),
+                                                     university_name=self.cleaned_data.get('university_name'),
+                                                     year_of_applying=self.cleaned_data.get('year_of_applying'),
+                                                     education_program=self.cleaned_data.get('education_program'),
+                                                     education_period=self.cleaned_data.get('education_period'),
+                                                     speciality=self.cleaned_data.get('speciality'),
+                                                     education_form=self.cleaned_data.get('education_form'),
+                                                     status=self.cleaned_data.get('status'),
+                                                     phone_number=self.cleaned_data.get('phone_number'),
+                                                     email=self.cleaned_data.get('email'),
+                                                     parent_name=self.cleaned_data.get('parent_name'),
+                                                     parent_type=self.cleaned_data.get('parent_type'),
+                                                     parent_phone_number=self.cleaned_data.get('parent_phone_number'),
+                                                     parent_second_name=self.cleaned_data.get('parent_second_name'),
+                                                     parent_second_type=self.cleaned_data.get('parent_second_type'),
+                                                     parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
+                                                     profile_photo=self.cleaned_data.get('profile_photo'))
         return user
 
 
@@ -224,32 +224,32 @@ class StudentCreateFormForEmp(UserCreationForm):
         user.is_student = True
         user.username = self.cleaned_data.get('email')
         user.save()
-        student = StudentAbroad.objects.create(user=user,
-                                               lastname=self.cleaned_data.get('lastname'),
-                                               firstname=self.cleaned_data.get('firstname'),
-                                               fathersname=self.cleaned_data.get('fathersname'),
-                                               date_of_birth=self.cleaned_data.get('date_of_birth'),
-                                               gender=self.cleaned_data.get('gender'),
-                                               university=self.university,
-                                               last_school=self.cleaned_data.get('last_school'),
-                                               type_of_applying=self.cleaned_data.get('type_of_applying'),
-                                               education_country=self.cleaned_data.get('education_country'),
-                                               university_name=self.cleaned_data.get('university_name'),
-                                               year_of_applying=self.cleaned_data.get('year_of_applying'),
-                                               education_program=self.cleaned_data.get('education_program'),
-                                               education_period=self.cleaned_data.get('education_period'),
-                                               speciality=self.cleaned_data.get('speciality'),
-                                               education_form=self.cleaned_data.get('education_form'),
-                                               status=self.cleaned_data.get('status'),
-                                               phone_number=self.cleaned_data.get('phone_number'),
-                                               email=self.cleaned_data.get('email'),
-                                               parent_name=self.cleaned_data.get('parent_name'),
-                                               parent_type=self.cleaned_data.get('parent_type'),
-                                               parent_phone_number=self.cleaned_data.get('parent_phone_number'),
-                                               parent_second_name=self.cleaned_data.get('parent_second_name'),
-                                               parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                               parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
-                                               profile_photo=self.cleaned_data.get('profile_photo'))
+        student = StudentAbroadCommon.objects.create(user=user,
+                                                     lastname=self.cleaned_data.get('lastname'),
+                                                     firstname=self.cleaned_data.get('firstname'),
+                                                     fathersname=self.cleaned_data.get('fathersname'),
+                                                     date_of_birth=self.cleaned_data.get('date_of_birth'),
+                                                     gender=self.cleaned_data.get('gender'),
+                                                     university=self.university,
+                                                     last_school=self.cleaned_data.get('last_school'),
+                                                     type_of_applying=self.cleaned_data.get('type_of_applying'),
+                                                     education_country=self.cleaned_data.get('education_country'),
+                                                     university_name=self.cleaned_data.get('university_name'),
+                                                     year_of_applying=self.cleaned_data.get('year_of_applying'),
+                                                     education_program=self.cleaned_data.get('education_program'),
+                                                     education_period=self.cleaned_data.get('education_period'),
+                                                     speciality=self.cleaned_data.get('speciality'),
+                                                     education_form=self.cleaned_data.get('education_form'),
+                                                     status=self.cleaned_data.get('status'),
+                                                     phone_number=self.cleaned_data.get('phone_number'),
+                                                     email=self.cleaned_data.get('email'),
+                                                     parent_name=self.cleaned_data.get('parent_name'),
+                                                     parent_type=self.cleaned_data.get('parent_type'),
+                                                     parent_phone_number=self.cleaned_data.get('parent_phone_number'),
+                                                     parent_second_name=self.cleaned_data.get('parent_second_name'),
+                                                     parent_second_type=self.cleaned_data.get('parent_second_type'),
+                                                     parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
+                                                     profile_photo=self.cleaned_data.get('profile_photo'))
         return user
 
 
@@ -279,7 +279,7 @@ class StudentUpdateForm(forms.ModelForm):
     parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
 
     class Meta:
-        model = StudentAbroad
+        model = StudentAbroadCommon
         fields = ('lastname', 'firstname', 'fathersname', 'date_of_birth', 'gender', 'university',
                   'last_school', 'type_of_applying', 'education_country', 'university_name', 'year_of_applying',
                   'education_program', 'education_period', 'speciality', 'education_form', 'status', 'phone_number',

@@ -16,7 +16,7 @@ from dcu.resources import StudentResource
 from university_employee.models import Employee
 from student_abroad.forms import StudentSignUpForm, StudentCreateForm, StudentUpdateForm, ContactForm, \
     StudentCreateFormForEmp, DocumentUploadForm
-from student_abroad.models import StudentAbroad, StudentDocuments
+from student_abroad.models import StudentAbroadCommon, StudentDocuments
 from university_local.models import University
 from users.models import CustomUser
 
@@ -108,14 +108,14 @@ def student_list(request):
     employee = None
     if customUser.is_employee:
         employee = Employee.objects.get(pk=user.id)
-        students = StudentAbroad.objects.filter(university=employee.university)
+        students = StudentAbroadCommon.objects.filter(university=employee.university)
     else:
-        students = StudentAbroad.objects.all()
+        students = StudentAbroadCommon.objects.all()
     return render(request, 'student_abroad/student_list.html', {"students": students, "employee": employee})
 
 
 class StudentDetailView(LoginRequiredMixin, DetailView):
-    model = StudentAbroad
+    model = StudentAbroadCommon
     template_name = "student_abroad/student_detail.html"
 
     def get_context_data(self, **kwargs):
@@ -125,7 +125,7 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
 
 
 class StudentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = StudentAbroad
+    model = StudentAbroadCommon
     form_class = StudentUpdateForm
     success_message = "Запись успешно обновлена"
 
@@ -140,7 +140,7 @@ class StudentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 @method_decorator([login_required, super_or_emp_required], name='dispatch')
 class StudentDeleteView(LoginRequiredMixin, DeleteView):
-    model = StudentAbroad
+    model = StudentAbroadCommon
     success_url = reverse_lazy('student-list')
 
 
@@ -151,7 +151,7 @@ def contact_view(request):
         # Если форма заполнена корректно, сохраняем все введённые пользователем значения
         if form.is_valid():
             user = request.user
-            student = StudentAbroad.objects.get(pk=user.id)
+            student = StudentAbroadCommon.objects.get(pk=user.id)
             full_name = form.cleaned_data['full_name'] = student.lastname + ' ' + \
                                                          student.firstname + ' ' + student.fathersname
             subject = form.cleaned_data['subject']
@@ -213,7 +213,7 @@ class DocumentUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return form
 
     def form_valid(self, form):
-        student = StudentAbroad.objects.get(user_id=self.kwargs['pk'])
+        student = StudentAbroadCommon.objects.get(user_id=self.kwargs['pk'])
         form.student = student
         user = form.save()
         return redirect('student-detail', student.user_id)

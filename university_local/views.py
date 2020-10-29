@@ -30,7 +30,7 @@ class UniversityDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UniversityDetailView, self).get_context_data(**kwargs)
-        context['university_employee'] = Employee.objects.filter(university=self.kwargs['pk'])
+        context['employees'] = Employee.objects.filter(university=self.kwargs['pk'])
         return context
 
 

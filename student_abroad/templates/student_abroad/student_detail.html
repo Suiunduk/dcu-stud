@@ -1,9 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block pagename %}Информация о студенте{% endblock pagename %}
-{% block content-header %}
-<div class="card-header">
-  <div class="card-tools">
+{% block breadcrumb%}
     {% if  user.is_authenticated and user.is_student%}
         <a class="btn btn-tool" href="{% url 'change_password' %}"><i class="fas fa-edit"></i>
             Изменить пароль
@@ -27,9 +25,7 @@
           Удалить студента
         </a>
     {% endif %}
-  </div>
-</div>
-{% endblock content-header %}
+{% endblock breadcrumb %}
 
 {% block content %}
     <div class="row mb-4">

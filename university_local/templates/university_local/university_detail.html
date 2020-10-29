@@ -1,9 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block pagename %}Информация о ВУЗе{% endblock pagename %}
-{% block content-header %}
-<div class="card-header">
-  <div class="card-tools">
+{% block breadcrumb %}
     <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
         <i class="fas fa-print"></i>
         Печать
@@ -16,13 +14,11 @@
       <i class="fas fa-trash-alt"></i>
       Удалить учебное заведение
     </a>
-  </div>
-</div>
-{% endblock content-header %}
-{% block breadcrumb %}
-    <a class="btn btn-primary" href="{% url 'employee-create' fk=object.id %}"><i
-        class="fas fa-plus"></i> Добавить сотрудника</a>
-    {% endblock breadcrumb %}
+    <a class="btn btn-tool" href="{% url 'employee-create' fk=object.id %}">
+        <i class="fas fa-plus"></i>
+        Добавить сотрудника
+    </a>
+{% endblock breadcrumb %}
 {% block content %}
     <div class="row mb-4 border-bottom">
       <div class="col-sm-4">

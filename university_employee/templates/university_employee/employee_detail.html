@@ -3,9 +3,7 @@
 {% block pagename %}
   Информация о сотруднике
 {% endblock pagename %}
-{% block content-header %}
-<div class="card-header">
-  <div class="card-tools">
+{% block breadcrumb %}
     {% if  user.is_authenticated and user.is_employee%}
         <a class="btn btn-tool" href="{% url 'change_password' %}"><i class="fas fa-edit"></i>
             Изменить пароль
@@ -29,9 +27,7 @@
           Удалить сотрудника
         </a>
     {% endif %}
-  </div>
-</div>
-{% endblock content-header %}
+{% endblock breadcrumb %}
 
 {% block content %}
     <div class="row mb-4">

@@ -33,7 +33,7 @@ class EmployeeSignUpView(CreateView):
 class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = CustomUser
     form_class = EmployeeCreateForm
-    template_name = 'employees/employee_form.html'
+    template_name = 'university_employee/employee_form.html'
     success_message = "Новый сотрудник успешно добавлен"
 
     def get_context_data(self, **kwargs):
@@ -53,7 +53,7 @@ class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
     model = Employee
-    template_name = "employees/employee_detail.html"
+    template_name = "university_employee/employee_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeDetailView, self).get_context_data(**kwargs)

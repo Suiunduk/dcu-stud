@@ -98,7 +98,6 @@
 
         </tr>
       {% endfor %}
-
     </tbody>
   </table>
 {% endblock content %}
@@ -147,14 +146,14 @@ $(document).ready(function () {
         buttons: [
             {
                 extend: 'excelHtml5',
-                text: 'Выгрузить в Excel',
+                text: '<i class="fa fa-download"></i> Excel',
                 exportOptions: {
                     columns: ':visible'
                 }
             },
             {
                 extend: 'pdfHtml5',
-                text: 'Выгрузить в PDF',
+                text: '<i class="fa fa-download"></i> PDF',
                 exportOptions: {
                     columns: ':visible',
                 },

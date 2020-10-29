@@ -1,9 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block pagename %}Информация о студенте{% endblock pagename %}
-{% block content-header %}
-<div class="card-header">
-  <div class="card-tools">
+{% block breadcrumb %}
     {% if  user.is_authenticated and user.is_superuser or user.is_employee%}
         <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
             <i class="fas fa-print"></i>
@@ -18,9 +16,7 @@
           Удалить студента
         </a>
     {% endif %}
-  </div>
-</div>
-{% endblock content-header %}
+{% endblock breadcrumb %}
 
 {% block content %}
     <div class="row mb-4">

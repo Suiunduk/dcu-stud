@@ -4,7 +4,7 @@ from django.db import transaction
 from django.forms.utils import ValidationError
 
 from university_employee.models import Employee
-from student_abroad.models import StudentAbroad
+from student_abroad.models import StudentAbroadCommon
 from university_local.models import University
 from users.models import CustomUser
 
