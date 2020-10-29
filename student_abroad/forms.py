@@ -4,82 +4,88 @@ from django.db import transaction
 from django.forms import modelformset_factory
 from django.forms.utils import ValidationError
 
+from core.models import Status, Gender, TypeOfApplying, Country, EducationProgram, EducationForm
 from student_abroad.models import StudentAbroad, StudentDocuments
 from university_local.models import University
 from users.models import CustomUser
 
 universities = University.objects.all()
+genders = Gender.objects.all()
+statuses = Status.objects.all()
+types_of_applying = TypeOfApplying.objects.all()
+countries = Country.objects.all()
+edu_programs = EducationProgram.objects.all()
+edu_forms = EducationForm.objects.all()
 
-STATUS = [
-    ('Зачислен', 'Зачислен'),
-    ('Переведен на следующий курс', 'Переведен на следующий курс'),
-    ('Академический отпуск', 'Академический отпуск'),
-    ('Отчислен', 'Отчислен')
-]
 
-GENDER = [
-    ('Мужской', 'Мужской'),
-    ('Женский', 'Женский')
-]
-
-EDU_PROGRAM = [
-    ('Бакалавр', 'Бакалавр'),
-    ('Магистратура', 'Магистратура'),
-    ('Докторантура', 'Докторантура'),
-    ('Языковая стажировка', 'Языковая стажировка'),
-    ('Летняя школа', 'Летняя школа'),
-    ('Стажировка', 'Стажировка'),
-    ('Другое', 'Другое')
-]
-
-PARENT_TYPE = [
-    ('', ''),
-    ('Отец', 'Отец'),
-    ('Мать', 'Мать'),
-    ('Брат/Сестра', 'Брат/Сестра'),
-    ('Другой родственник', 'Другой родственник')
-]
-
-APPLYING_TYPE = [
-    ('по линии Соглашений Министерства образования и науки Кыргызской республики', 'по линии Соглашений Министерства '
-                                                                                   'образования и науки Кыргызской '
-                                                                                   'республики'),
-    ('по линии межвузовских Соглашений', 'по линии межвузовских Соглашений'),
-    ('в частном порядке (самостоятельно)', 'в частном порядке (самостоятельно)')
-]
-
-EDU_FORM = [
-    ('Бюджет', 'Бюджет'),
-    ('Стипендия', 'Стипендия'),
-    ('Контракт', 'Контракт')
-]
+#
+# STATUS = [
+#     ('Зачислен', 'Зачислен'),
+#     ('Переведен на следующий курс', 'Переведен на следующий курс'),
+#     ('Академический отпуск', 'Академический отпуск'),
+#     ('Отчислен', 'Отчислен')
+# ]
+#
+# GENDER = [
+#     ('Мужской', 'Мужской'),
+#     ('Женский', 'Женский')
+# ]
+#
+# EDU_PROGRAM = [
+#     ('Бакалавр', 'Бакалавр'),
+#     ('Магистратура', 'Магистратура'),
+#     ('Докторантура', 'Докторантура'),
+#     ('Языковая стажировка', 'Языковая стажировка'),
+#     ('Летняя школа', 'Летняя школа'),
+#     ('Стажировка', 'Стажировка'),
+#     ('Другое', 'Другое')
+# ]
+#
+# PARENT_TYPE = [
+#     ('', ''),
+#     ('Отец', 'Отец'),
+#     ('Мать', 'Мать'),
+#     ('Брат/Сестра', 'Брат/Сестра'),
+#     ('Другой родственник', 'Другой родственник')
+# ]
+#
+# APPLYING_TYPE = [
+#     ('по линии Соглашений Министерства образования и науки Кыргызской республики', 'по линии Соглашений Министерства '
+#                                                                                    'образования и науки Кыргызской '
+#                                                                                    'республики'),
+#     ('по линии межвузовских Соглашений', 'по линии межвузовских Соглашений'),
+#     ('в частном порядке (самостоятельно)', 'в частном порядке (самостоятельно)')
+# ]
+#
+# EDU_FORM = [
+#     ('Бюджет', 'Бюджет'),
+#     ('Стипендия', 'Стипендия'),
+#     ('Контракт', 'Контракт')
+# ]
 
 
 class StudentSignUpForm(UserCreationForm):
-    lastname = forms.CharField(label='Фамилия', max_length=100)
-    firstname = forms.CharField(label='Имя', max_length=100)
-    fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
+    lastname = forms.CharField(label='Фамилия', max_length=255)
+    firstname = forms.CharField(label='Имя', max_length=255)
+    fathersname = forms.CharField(label='Отчество', max_length=255, required=False)
     date_of_birth = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget)
-    gender = forms.ChoiceField(label='Пол', choices=GENDER)
-    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities)
-    last_school = forms.CharField(label='Предыдущая школа', max_length=100, required=False)
-    type_of_applying = forms.ChoiceField(label='Линия поступления', choices=APPLYING_TYPE)
-    education_country = forms.CharField(label='Страна обучения', max_length=100)
-    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=220)
+    gender = forms.ModelChoiceField(label='Пол', widget=forms.Select, queryset=genders)
+    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities,
+                                        required=False)
+    school = forms.CharField(label='Школа', max_length=255, required=False)
+    college = forms.CharField(label='Колледж', max_length=255, required=False)
+    type_of_applying = forms.ModelChoiceField(label='Линия поступления', widget=forms.Select,
+                                              queryset=types_of_applying)
+    education_country = forms.ModelChoiceField(label='Страна обучения', widget=forms.Select, queryset=countries)
+    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=255)
     year_of_applying = forms.DateField(label='Год поступления', widget=forms.SelectDateWidget)
-    education_program = forms.ChoiceField(label='Программа обучения', choices=EDU_PROGRAM)
-    education_period = forms.IntegerField(label='Период обучения', max_value=10)
-    speciality = forms.CharField(label='Специальность', max_length=220)
-    education_form = forms.ChoiceField(label='форма обучения', choices=EDU_FORM)
-    status = forms.ChoiceField(label='Статус', choices=STATUS)
-    phone_number = forms.CharField(label='Номер телефона', max_length=20)
+    education_program = forms.ModelChoiceField(label='Программа обучения', widget=forms.Select, queryset=edu_programs)
+    education_period_years = forms.IntegerField(label='Период обучения(годы)', max_value=10)
+    education_period_months = forms.IntegerField(label='Период обучения(месяцы)', max_value=10)
+    speciality = forms.CharField(label='Специальность', max_length=255)
+    education_form = forms.ModelChoiceField(label='Форма обучения', widget=forms.Select, queryset=edu_forms)
+    status = forms.ModelChoiceField(label='Статус', widget=forms.Select, queryset=statuses)
     email = forms.EmailField(label='Email', )
-    parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
-    parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
     profile_photo = forms.ImageField(label='Фотография профиля', widget=forms.widgets.FileInput(), required=False)
 
     class Meta(UserCreationForm.Meta):
@@ -99,53 +105,45 @@ class StudentSignUpForm(UserCreationForm):
                                                date_of_birth=self.cleaned_data.get('date_of_birth'),
                                                gender=self.cleaned_data.get('gender'),
                                                university=self.cleaned_data.get('university'),
-                                               last_school=self.cleaned_data.get('last_school'),
+                                               school=self.cleaned_data.get('school'),
+                                               college=self.cleaned_data.get('college'),
                                                type_of_applying=self.cleaned_data.get('type_of_applying'),
                                                education_country=self.cleaned_data.get('education_country'),
                                                university_name=self.cleaned_data.get('university_name'),
                                                year_of_applying=self.cleaned_data.get('year_of_applying'),
                                                education_program=self.cleaned_data.get('education_program'),
-                                               education_period=self.cleaned_data.get('education_period'),
+                                               education_period_years=self.cleaned_data.get('education_period_years'),
+                                               education_period_months=self.cleaned_data.get('education_period_months'),
                                                speciality=self.cleaned_data.get('speciality'),
                                                education_form=self.cleaned_data.get('education_form'),
                                                status=self.cleaned_data.get('status'),
-                                               phone_number=self.cleaned_data.get('phone_number'),
                                                email=self.cleaned_data.get('email'),
-                                               parent_name=self.cleaned_data.get('parent_name'),
-                                               parent_type=self.cleaned_data.get('parent_type'),
-                                               parent_phone_number=self.cleaned_data.get('parent_phone_number'),
-                                               parent_second_name=self.cleaned_data.get('parent_second_name'),
-                                               parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                               parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
                                                profile_photo=self.cleaned_data.get('profile_photo'))
         return user
 
 
 class StudentCreateForm(UserCreationForm):
-    lastname = forms.CharField(label='Фамилия', max_length=100)
-    firstname = forms.CharField(label='Имя', max_length=100)
-    fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
+    lastname = forms.CharField(label='Фамилия', max_length=255)
+    firstname = forms.CharField(label='Имя', max_length=255)
+    fathersname = forms.CharField(label='Отчество', max_length=255, required=False)
     date_of_birth = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget)
-    gender = forms.ChoiceField(label='Пол', choices=GENDER)
-    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities)
-    last_school = forms.CharField(label='Предыдущая школа', max_length=100, required=False)
-    type_of_applying = forms.ChoiceField(label='Линия поступления', choices=APPLYING_TYPE)
-    education_country = forms.CharField(label='Страна обучения', max_length=100)
-    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=220)
+    gender = forms.ModelChoiceField(label='Пол', widget=forms.Select, queryset=genders)
+    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities,
+                                        required=False)
+    school = forms.CharField(label='Школа', max_length=255, required=False)
+    college = forms.CharField(label='Колледж', max_length=255, required=False)
+    type_of_applying = forms.ModelChoiceField(label='Линия поступления', widget=forms.Select,
+                                              queryset=types_of_applying)
+    education_country = forms.ModelChoiceField(label='Страна обучения', widget=forms.Select, queryset=countries)
+    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=255)
     year_of_applying = forms.DateField(label='Год поступления', widget=forms.SelectDateWidget)
-    education_program = forms.ChoiceField(label='Программа обучения', choices=EDU_PROGRAM)
-    education_period = forms.IntegerField(label='Период обучения', max_value=10)
-    speciality = forms.CharField(label='Специальность', max_length=220)
-    education_form = forms.ChoiceField(label='форма обучения', choices=EDU_FORM)
-    status = forms.ChoiceField(label='Статус', choices=STATUS)
-    phone_number = forms.CharField(label='Номер телефона', max_length=20)
-    email = forms.EmailField(label='Email')
-    parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
-    parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
+    education_program = forms.ModelChoiceField(label='Программа обучения', widget=forms.Select, queryset=edu_programs)
+    education_period_years = forms.IntegerField(label='Период обучения(годы)', max_value=10)
+    education_period_months = forms.IntegerField(label='Период обучения(месяцы)', max_value=10)
+    speciality = forms.CharField(label='Специальность', max_length=255)
+    education_form = forms.ModelChoiceField(label='Форма обучения', widget=forms.Select, queryset=edu_forms)
+    status = forms.ModelChoiceField(label='Статус', widget=forms.Select, queryset=statuses)
+    email = forms.EmailField(label='Email', )
     profile_photo = forms.ImageField(label='Фотография профиля', widget=forms.widgets.FileInput(), required=False)
 
     class Meta(UserCreationForm.Meta):
@@ -165,53 +163,44 @@ class StudentCreateForm(UserCreationForm):
                                                date_of_birth=self.cleaned_data.get('date_of_birth'),
                                                gender=self.cleaned_data.get('gender'),
                                                university=self.cleaned_data.get('university'),
-                                               last_school=self.cleaned_data.get('last_school'),
+                                               school=self.cleaned_data.get('school'),
+                                               college=self.cleaned_data.get('college'),
                                                type_of_applying=self.cleaned_data.get('type_of_applying'),
                                                education_country=self.cleaned_data.get('education_country'),
                                                university_name=self.cleaned_data.get('university_name'),
                                                year_of_applying=self.cleaned_data.get('year_of_applying'),
                                                education_program=self.cleaned_data.get('education_program'),
-                                               education_period=self.cleaned_data.get('education_period'),
+                                               education_period_years=self.cleaned_data.get('education_period_years'),
+                                               education_period_months=self.cleaned_data.get('education_period_months'),
                                                speciality=self.cleaned_data.get('speciality'),
                                                education_form=self.cleaned_data.get('education_form'),
                                                status=self.cleaned_data.get('status'),
-                                               phone_number=self.cleaned_data.get('phone_number'),
                                                email=self.cleaned_data.get('email'),
-                                               parent_name=self.cleaned_data.get('parent_name'),
-                                               parent_type=self.cleaned_data.get('parent_type'),
-                                               parent_phone_number=self.cleaned_data.get('parent_phone_number'),
-                                               parent_second_name=self.cleaned_data.get('parent_second_name'),
-                                               parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                               parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
                                                profile_photo=self.cleaned_data.get('profile_photo'))
         return user
 
 
 class StudentCreateFormForEmp(UserCreationForm):
-    lastname = forms.CharField(label='Фамилия', max_length=100)
-    firstname = forms.CharField(label='Имя', max_length=100)
-    fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
+    lastname = forms.CharField(label='Фамилия', max_length=255)
+    firstname = forms.CharField(label='Имя', max_length=255)
+    fathersname = forms.CharField(label='Отчество', max_length=255, required=False)
     date_of_birth = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget)
-    gender = forms.ChoiceField(label='Пол', choices=GENDER)
+    gender = forms.ModelChoiceField(label='Пол', widget=forms.Select, queryset=genders)
     university = forms.HiddenInput()
-    last_school = forms.CharField(label='Предыдущая школа', max_length=100, required=False)
-    type_of_applying = forms.ChoiceField(label='Линия поступления', choices=APPLYING_TYPE)
-    education_country = forms.CharField(label='Страна обучения', max_length=100)
-    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=220)
+    school = forms.CharField(label='Школа', max_length=255, required=False)
+    college = forms.HiddenInput()
+    type_of_applying = forms.ModelChoiceField(label='Линия поступления', widget=forms.Select,
+                                              queryset=types_of_applying)
+    education_country = forms.ModelChoiceField(label='Страна обучения', widget=forms.Select, queryset=countries)
+    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=255)
     year_of_applying = forms.DateField(label='Год поступления', widget=forms.SelectDateWidget)
-    education_program = forms.ChoiceField(label='Программа обучения', choices=EDU_PROGRAM)
-    education_period = forms.IntegerField(label='Период обучения', max_value=10)
-    speciality = forms.CharField(label='Специальность', max_length=220)
-    education_form = forms.ChoiceField(label='форма обучения', choices=EDU_FORM)
-    status = forms.ChoiceField(label='Статус', choices=STATUS)
-    phone_number = forms.CharField(label='Номер телефона', max_length=20)
-    email = forms.EmailField(label='Email')
-    parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
-    parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
+    education_program = forms.ModelChoiceField(label='Программа обучения', widget=forms.Select, queryset=edu_programs)
+    education_period_years = forms.IntegerField(label='Период обучения(годы)', max_value=10)
+    education_period_months = forms.IntegerField(label='Период обучения(месяцы)', max_value=10)
+    speciality = forms.CharField(label='Специальность', max_length=255)
+    education_form = forms.ModelChoiceField(label='Форма обучения', widget=forms.Select, queryset=edu_forms)
+    status = forms.ModelChoiceField(label='Статус', widget=forms.Select, queryset=statuses)
+    email = forms.EmailField(label='Email', )
     profile_photo = forms.ImageField(label='Фотография профиля', widget=forms.widgets.FileInput(), required=False)
 
     class Meta(UserCreationForm.Meta):
@@ -231,60 +220,51 @@ class StudentCreateFormForEmp(UserCreationForm):
                                                date_of_birth=self.cleaned_data.get('date_of_birth'),
                                                gender=self.cleaned_data.get('gender'),
                                                university=self.university,
-                                               last_school=self.cleaned_data.get('last_school'),
+                                               school=self.cleaned_data.get('school'),
+                                               college=self.cleaned_data.get('college'),
                                                type_of_applying=self.cleaned_data.get('type_of_applying'),
                                                education_country=self.cleaned_data.get('education_country'),
                                                university_name=self.cleaned_data.get('university_name'),
                                                year_of_applying=self.cleaned_data.get('year_of_applying'),
                                                education_program=self.cleaned_data.get('education_program'),
-                                               education_period=self.cleaned_data.get('education_period'),
+                                               education_period_years=self.cleaned_data.get('education_period_years'),
+                                               education_period_months=self.cleaned_data.get('education_period_months'),
                                                speciality=self.cleaned_data.get('speciality'),
                                                education_form=self.cleaned_data.get('education_form'),
                                                status=self.cleaned_data.get('status'),
-                                               phone_number=self.cleaned_data.get('phone_number'),
                                                email=self.cleaned_data.get('email'),
-                                               parent_name=self.cleaned_data.get('parent_name'),
-                                               parent_type=self.cleaned_data.get('parent_type'),
-                                               parent_phone_number=self.cleaned_data.get('parent_phone_number'),
-                                               parent_second_name=self.cleaned_data.get('parent_second_name'),
-                                               parent_second_type=self.cleaned_data.get('parent_second_type'),
-                                               parent_second_phone_number=self.cleaned_data.get('parent_second_phone_number'),
                                                profile_photo=self.cleaned_data.get('profile_photo'))
         return user
 
 
 class StudentUpdateForm(forms.ModelForm):
-    lastname = forms.CharField(label='Фамилия', max_length=100)
-    firstname = forms.CharField(label='Имя', max_length=100)
-    fathersname = forms.CharField(label='Отчество', max_length=100, required=False)
-    date_of_birth = forms.DateField(label='Дата рождения')
-    gender = forms.ChoiceField(label='Пол', choices=GENDER)
-    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities, disabled=True)
-    last_school = forms.CharField(label='Предыдущая школа', max_length=100, required=False)
-    type_of_applying = forms.ChoiceField(label='Линия поступления', choices=APPLYING_TYPE)
-    education_country = forms.CharField(label='Страна обучения', max_length=100)
-    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=220)
-    year_of_applying = forms.DateField(label='Год поступления')
-    education_program = forms.ChoiceField(label='Программа обучения', choices=EDU_PROGRAM)
-    education_period = forms.IntegerField(label='Период обучения', max_value=10)
-    speciality = forms.CharField(label='Специальность', max_length=220)
-    education_form = forms.ChoiceField(label='форма обучения', choices=EDU_FORM)
-    status = forms.ChoiceField(label='Статус', choices=STATUS)
-    phone_number = forms.CharField(label='Номер телефона', max_length=20)
-    parent_name = forms.CharField(label='ФИО одного из родственников', max_length=100)
-    parent_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_phone_number = forms.CharField(label='Номер телефона', max_length=100)
-    parent_second_name = forms.CharField(label='ФИО ещё одного родственника', max_length=100)
-    parent_second_type = forms.ChoiceField(label='Степень родства', choices=PARENT_TYPE)
-    parent_second_phone_number = forms.CharField(label='Номер телефона', max_length=100)
+    lastname = forms.CharField(label='Фамилия', max_length=255)
+    firstname = forms.CharField(label='Имя', max_length=255)
+    fathersname = forms.CharField(label='Отчество', max_length=255, required=False)
+    date_of_birth = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget)
+    gender = forms.ModelChoiceField(label='Пол', widget=forms.Select, queryset=genders)
+    university = forms.ModelChoiceField(label='Предыдущий ВУЗ', widget=forms.Select, queryset=universities, required=False, disabled=True)
+    school = forms.CharField(label='Школа', max_length=255, required=False)
+    college = forms.HiddenInput()
+    type_of_applying = forms.ModelChoiceField(label='Линия поступления', widget=forms.Select,
+                                              queryset=types_of_applying)
+    education_country = forms.ModelChoiceField(label='Страна обучения', widget=forms.Select, queryset=countries)
+    university_name = forms.CharField(label='Название зарубежгого учебного заведения', max_length=255)
+    year_of_applying = forms.DateField(label='Год поступления', widget=forms.SelectDateWidget)
+    education_program = forms.ModelChoiceField(label='Программа обучения', widget=forms.Select, queryset=edu_programs)
+    education_period_years = forms.IntegerField(label='Период обучения(годы)', max_value=10)
+    education_period_months = forms.IntegerField(label='Период обучения(месяцы)', max_value=10)
+    speciality = forms.CharField(label='Специальность', max_length=255)
+    education_form = forms.ModelChoiceField(label='Форма обучения', widget=forms.Select, queryset=edu_forms)
+    status = forms.ModelChoiceField(label='Статус', widget=forms.Select, queryset=statuses)
+    profile_photo = forms.ImageField(label='Фотография профиля', widget=forms.widgets.FileInput(), required=False)
 
     class Meta:
         model = StudentAbroad
         fields = ('lastname', 'firstname', 'fathersname', 'date_of_birth', 'gender', 'university',
-                  'last_school', 'type_of_applying', 'education_country', 'university_name', 'year_of_applying',
-                  'education_program', 'education_period', 'speciality', 'education_form', 'status', 'phone_number',
-                  'parent_name', 'parent_type', 'parent_phone_number', 'parent_second_name',
-                  'parent_second_type', 'parent_second_phone_number', 'profile_photo')
+                  'school', 'college', 'type_of_applying', 'education_country', 'university_name',
+                  'year_of_applying', 'education_program', 'education_period_years', 'education_period_months',
+                  'speciality', 'education_form', 'status', 'profile_photo')
 
 
 class ContactForm(forms.Form):

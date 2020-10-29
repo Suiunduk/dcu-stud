@@ -173,7 +173,8 @@ def contact_view(request):
         # Заполняем форму
         form = ContactForm()
     # Отправляем форму на страниц
-    return render(request, 'student_abroad/send_email.html', {'form': form, 'username': auth.get_user(request).username})
+    return render(request, 'student_abroad/send_email.html',
+                  {'form': form, 'username': auth.get_user(request).username})
 
 
 def email_success(reguest):

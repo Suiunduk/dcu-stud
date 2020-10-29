@@ -22,8 +22,8 @@
         <label class="form-control" for="1"><input  type="checkbox" name="list" data-target ="1" value="Ф.И.О" id="1" checked> Ф.И.О</label>
         <label class="form-control" for="2"><input  type="checkbox" name="list" data-target ="2" value="Дата рождения" id="2"> Дата рождения</label>
         <label class="form-control" for="3"><input  type="checkbox" name="list" data-target ="3" value="Пол" id="3" checked> Пол</label>
-        <label class="form-control" for="4"><input  type="checkbox" name="list" data-target ="4" value="Предыдущий ВУЗ" id="4" checked> Предыдущий ВУЗ</label>
-        <label class="form-control" for="5"><input  type="checkbox" name="list" data-target ="5" value="Предыдущая школа" id="5"> Предыдущая школа</label>
+        <label class="form-control" for="4"><input  type="checkbox" name="list" data-target ="4" value="Предыдущий ВУЗ" id="4" checked> Предыдущий ВУЗ/СПУЗ</label>
+        <label class="form-control" for="5"><input  type="checkbox" name="list" data-target ="5" value="Школа" id="5"> Школа</label>
     </div>
     <div class="col-md-3">
         <label class="form-control" for="6"><input  type="checkbox" name="list" data-target ="6" value="Линия поступления" id="6"> Линия поступления</label>
@@ -37,12 +37,7 @@
         <label class="form-control" for="12"><input  type="checkbox" name="list" data-target ="12" value="Специальность" id="12" checked> Специальность</label>
         <label class="form-control" for="13"><input  type="checkbox" name="list" data-target ="13" value="Форма обучения" id="13"> Форма обучения</label>
         <label class="form-control" for="14"><input  type="checkbox" name="list" data-target ="14" value="Статус" id="14" checked> Статус</label>
-        <label class="form-control" for="15"><input  type="checkbox" name="list" data-target ="15" value="Номер телефона" id="15" checked> Номер телефона</label>
-    </div>
-    <div class="col-md-3">
-        <label class="form-control" for="16"><input  type="checkbox" name="list" data-target ="16" value="E-mail" id="16" checked> E-mail</label>
-        <label class="form-control" for="17"><input  type="checkbox" name="list" data-target ="17" value="Данные о первом родственнике" id="17"> Данные о первом родственнике</label>
-        <label class="form-control" for="18"><input  type="checkbox" name="list" data-target ="17" value="Данные о втором родственнике" id="17"> Данные о втором родственнике</label>
+        <label class="form-control" for="16"><input  type="checkbox" name="list" data-target ="16" value="E-mail" id="15" checked> E-mail</label>
     </div>
 </div>
 
@@ -55,8 +50,8 @@
         <th>Ф.И.О.</th>
         <th>Дата рождения</th>
         <th>Пол</th>
-        <th>Предыдущий ВУЗ</th>
-        <th>Предыдущая школа</th>
+        <th>Предыдущий ВУЗ/СПУЗ</th>
+        <th>Школа</th>
         <th>Линия поступления</th>
         <th>Страна обучения</th>
         <th>Зарубежное место обучения</th>
@@ -66,10 +61,7 @@
         <th>Специальность</th>
         <th>Форма обучения</th>
         <th>Статус</th>
-        <th>Номер телефона</th>
         <th>E-mail</th>
-        <th>Данные о первом родственнике</th>
-        <th>Данные о втором родственнике</th>
       </tr>
     </thead>
     <tbody>
@@ -80,21 +72,24 @@
           <td>{{ student.lastname }} {{student.firstname }} {{student.fathersname }}</td>
           <td>{{ student.date_of_birth }}</td>
           <td>{{ student.gender }}</td>
-          <td>{{ student.university }}</td>
-          <td>{{ student.last_school }}</td>
+          <td>
+              {% if student.university != Null  %}
+              {{ student.university }}
+              {% else %}
+              {{ student.college }}
+              {% endif %}
+          </td>
+          <td>{{ student.school }}</td>
           <td>{{ student.type_of_applying }}</td>
           <td>{{ student.education_country }}</td>
           <td>{{ student.university_name }}</td>
           <td>{{ student.year_of_applying }}</td>
           <td>{{ student.education_program }}</td>
-          <td>{{ student.education_period }}</td>
+          <td>{{ student.education_period_years }}, {{ student.education_period_months }}</td>
           <td>{{ student.speciality }}</td>
           <td>{{ student.education_form }}</td>
           <td>{{ student.status }}</td>
-          <td>{{ student.phone_number }}</td>
           <td>{{ student.email }}</td>
-          <td>{{ student.parent_name }}, {{ student.parent_type }}, {{ student.parent_phone_number }}</td>
-          <td>{{ student.parent_second_name }}, {{ student.parent_second_type }}, {{ student.parent_second_phone_number }}</td>
 
         </tr>
       {% endfor %}
@@ -141,7 +136,7 @@ $(document).ready(function () {
         /**Задаем по умолчанию невидимые столбцы*/
         columnDefs : [
             //hide the second & fourth column
-            { 'visible': false, 'targets': [2, 5, 6, 8, 9, 10, 11, 13, 17,18] }
+            { 'visible': false, 'targets': [2, 5, 6, 8, 9, 10, 11, 13] }
         ],
         buttons: [
             {
