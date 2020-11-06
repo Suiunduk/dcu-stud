@@ -15,7 +15,7 @@
     <!--==========================
       Announcements Section
     ============================-->
-    <section id="services" class="section-bg" style="padding-top: 10%">
+    <section id="services" class="section-bg" style="padding-top: 110px">
       <div class="container">
 
         <header class="section-header">
@@ -42,9 +42,7 @@
         </div>
 
         <div class="row">
-            <h5>Дополнительные файлы:</h5>
-        </div>
-        <div class="row">
+          <div class="col-md-12 col-lg-12"><h5>Дополнительные файлы:</h5></div>
           {% for document in documents %}
               <div class="col-md-4 col-lg-4 " data-wow-duration="1.4s">
                 <div class="box">
@@ -54,6 +52,13 @@
                 </div>
               </div>
           {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 ">
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="{% url 'signup-applicant' %}">Зарегестрироваться</a>
+                </div>
+            </div>
         </div>
       </div>
     </section><!-- #services -->

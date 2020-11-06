@@ -31,6 +31,7 @@ def homepage(request):
             students_count_for_emp = StudentAbroad.objects.filter(edu_organisation=employee.edu_organisation).count()
             return render(request, 'core/employee_homepage.html', {"students_count": students_count_for_emp})
 
+
         else:
             return render(request, 'core/student_homepage.html')
 

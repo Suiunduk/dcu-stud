@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 USER_TYPE_CHOICES = (
     ('student_abroad', _("Студент за рубежом")),
     ('university_employee', _("Сотрудник университета")),
-    ('student_candidate', _("Кандидат на отбор в конкурсе")),
+    ('student_applicant', _("Кандидат на отбор в конкурсе")),
 )
 
 

@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('favicon.ico/', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
     path('student_abroad/', include('student_abroad.urls')),
+    path('student_applicant/', include('student_applicant.urls')),
     path('student_foreign/', include('student_foreign.urls')),
     path('university_local/', include('university_local.urls')),
     path('edu_organisation/', include('edu_organisation.urls')),

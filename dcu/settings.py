@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'bootstrap_modal_forms',
     'edu_organisation',
     'announcement',
+    'student_applicant',
 ]
 
 MIDDLEWARE = [
