@@ -10,6 +10,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from tablib import Dataset
 
 from core.decorators import superuser_required, employee_required, super_or_emp_required
+from edu_organisation.models import EduOrganisation
 from university_employee.models import Employee
 from student_foreign.forms import StudentAbroadCreateFormForEmp, StudentAbroadCreateForm, StudentAbroadUpdateForm
 from student_foreign.models import StudentForeign
@@ -49,7 +50,7 @@ class StudentCreateViewForEmp(LoginRequiredMixin, SuccessMessageMixin, CreateVie
         return form
 
     def form_valid(self, form):
-        form.university = University.objects.get(id=self.kwargs['fk'])
+        form.edu_organisation = EduOrganisation.objects.get(id=self.kwargs['fk'])
         student = form.save()
         return redirect('student-foreign-detail', student.id)
 
@@ -59,9 +60,9 @@ def student_list(request):
     user = request.user
     customUser = CustomUser.objects.get(pk=user.id)
     employee = None
-    if customUser.is_employee:
+    if customUser.user_type == 'university_employee':
         employee = Employee.objects.get(pk=user.id)
-        students = StudentForeign.objects.filter(university=employee.university)
+        students = StudentForeign.objects.filter(edu_organisation=employee.edu_organisation)
     else:
         students = StudentForeign.objects.all()
     return render(request, 'student_foreign/student_list.html', {"students": students, "employee": employee})

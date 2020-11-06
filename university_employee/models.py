@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+from edu_organisation.models import EduOrganisation
 from university_local.models import University
 from users.models import CustomUser
 
@@ -14,7 +15,7 @@ class Employee(models.Model):
     position = models.CharField(max_length=255, default='Сотрудник')
     phone_number = models.CharField(max_length=255, unique=True)
     email = models.CharField(max_length=255, unique=True)
-    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    edu_organisation = models.ForeignKey(EduOrganisation, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['lastname', 'firstname', 'fathersname']

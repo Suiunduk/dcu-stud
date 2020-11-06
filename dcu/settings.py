@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'import_export',
     'bootstrap_modal_forms',
+    'edu_organisation',
+    'announcement',
 ]
 
 MIDDLEWARE = [

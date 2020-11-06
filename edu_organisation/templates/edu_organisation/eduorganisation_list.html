@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список ВУЗов{% endblock pagename %}
+{% block title %}Список учебных заведений{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'organisation-create' %}"><i
+    class="fas fa-plus"></i> Добавить</a>
+{#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
+{#    class="fas fa-upload"></i> Импорт</a>#}
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="organisationtable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название учебного заведения</th>
+        <th>Код</th>
+        <th>Фактический адрес учебного заведения</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for organisation in organisations %}
+        <tr class='clickable-row' data-href="{% url  'university-detail' university.id %}">
+          <td>{{ forloop.counter}}</td>
+          <td>{{ organisation.org_name}}</td>
+          <td>{{ organisation.org_code }}</td>
+          <td>{{ organisation.org_address}}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+<script>
+    $('#organisationtable').DataTable({
+       "language": {
+        "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true
+
+    });
+</script>
+
+{% endblock morejs %}

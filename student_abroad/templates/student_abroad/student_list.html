@@ -8,8 +8,8 @@
         class="fas fa-plus"></i> Добавить</a>
 {#    <button id="student-create" class="btn btn-primary" type="button" name="button" data-form-url="{% url 'student-create' %}"><i class="fas fa-plus mr-2"></i>Добавить</button>#}
 {% endif %}
-{% if  user.is_authenticated and user.is_employee%}
-    <a class="btn btn-primary" href="{% url 'student-create-emp' employee.university.id %}"><i
+{% if  user.is_authenticated and user.user_type == 'university_employee'%}
+    <a class="btn btn-primary" href="{% url 'student-create-emp' employee.edu_organisation.id %}"><i
         class="fas fa-plus"></i> Добавить</a>
 {% endif %}
 {% endblock breadcrumb %}
@@ -50,7 +50,7 @@
         <th>Ф.И.О.</th>
         <th>Дата рождения</th>
         <th>Пол</th>
-        <th>Предыдущий ВУЗ/СПУЗ</th>
+        <th>Предыдущее обучение</th>
         <th>Школа</th>
         <th>Линия поступления</th>
         <th>Страна обучения</th>
@@ -72,20 +72,14 @@
           <td>{{ student.lastname }} {{student.firstname }} {{student.fathersname }}</td>
           <td>{{ student.date_of_birth }}</td>
           <td>{{ student.gender }}</td>
-          <td>
-              {% if student.university != Null  %}
-              {{ student.university }}
-              {% else %}
-              {{ student.college }}
-              {% endif %}
-          </td>
+          <td>{{ student.edu_organisation }}</td>
           <td>{{ student.school }}</td>
           <td>{{ student.type_of_applying }}</td>
           <td>{{ student.education_country }}</td>
           <td>{{ student.university_name }}</td>
           <td>{{ student.year_of_applying }}</td>
           <td>{{ student.education_program }}</td>
-          <td>{{ student.education_period_years }}, {{ student.education_period_months }}</td>
+          <td>{{ student.education_period_years }}</td>
           <td>{{ student.speciality }}</td>
           <td>{{ student.education_form }}</td>
           <td>{{ student.status }}</td>

@@ -4,7 +4,7 @@
   Информация о сотруднике
 {% endblock pagename %}
 {% block breadcrumb %}
-    {% if  user.is_authenticated and user.is_employee%}
+    {% if  user.is_authenticated and user.user_type == 'university_employee'%}
         <a class="btn btn-tool" href="{% url 'change_password' %}"><i class="fas fa-edit"></i>
             Изменить пароль
         </a>
@@ -46,10 +46,10 @@
         <div>
           <div class="form-group border-bottom row">
             <label class="col">
-              Университет:
+              Учебное заведение:
             </label>
             <div class="col">
-              {{ object.university }}
+              {{ object.edu_organisation }}
             </div>
           </div>
           <div class="form-group border-bottom row">

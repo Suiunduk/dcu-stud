@@ -13,10 +13,11 @@ from django.views.generic import CreateView, FormView, DetailView, UpdateView, D
 from core.decorators import employee_required, superuser_required, super_or_emp_required, student_required
 from dcu import settings
 from dcu.resources import StudentResource
+from edu_organisation.models import EduOrganisation
 from university_employee.models import Employee
 from student_abroad.forms import StudentSignUpForm, StudentCreateForm, StudentUpdateForm, ContactForm, \
-    StudentCreateFormForEmp, DocumentUploadForm
-from student_abroad.models import StudentAbroad, StudentDocuments
+    StudentCreateFormForEmp, DocumentUploadForm, StudentParentForm, StudentPhoneNumberForm
+from student_abroad.models import StudentAbroad, StudentDocuments, StudentParent, StudentPhoneNumber
 from university_local.models import University
 from users.models import CustomUser
 
@@ -40,6 +41,36 @@ class StudentSignUpView(CreateView):
 
     def get_form(self, **kwargs):
         form = super(StudentSignUpView, self).get_form()
+        form.fields['date_of_birth'].widget = widgets.DateInput(
+            attrs={'type': 'date'})
+        form.fields['year_of_applying'].widget = widgets.DateInput(
+            attrs={'type': 'date'})
+        return form
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('homepage')
+
+
+class StudentSignUpWizardView(CreateView):
+    model = CustomUser
+    form_class = StudentSignUpForm
+    template_name = 'signup_wizard.html'
+    additional_model = StudentParent
+    additional_form_class = StudentParentForm
+    additional_model2 = StudentPhoneNumber
+    additional_form_class2 = StudentPhoneNumberForm
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        context = super(StudentSignUpWizardView, self).get_context_data(**kwargs)
+        context['additional_form'] = self.additional_form_class()
+        context['additional_form2'] = self.additional_form_class2()
+        return context
+
+    def get_form(self, **kwargs):
+        form = super(StudentSignUpWizardView, self).get_form()
         form.fields['date_of_birth'].widget = widgets.DateInput(
             attrs={'type': 'date'})
         form.fields['year_of_applying'].widget = widgets.DateInput(
@@ -96,7 +127,7 @@ class StudentCreateViewForEmp(LoginRequiredMixin, SuccessMessageMixin, CreateVie
         return form
 
     def form_valid(self, form):
-        form.university = University.objects.get(id=self.kwargs['fk'])
+        form.edu_organisation = EduOrganisation.objects.get(id=self.kwargs['fk'])
         user = form.save()
         return redirect('student-detail', user.id)
 
@@ -106,9 +137,9 @@ def student_list(request):
     user = request.user
     customUser = CustomUser.objects.get(pk=user.id)
     employee = None
-    if customUser.is_employee:
+    if customUser.user_type == 'university_employee':
         employee = Employee.objects.get(pk=user.id)
-        students = StudentAbroad.objects.filter(university=employee.university)
+        students = StudentAbroad.objects.filter(edu_organisation=employee.edu_organisation)
     else:
         students = StudentAbroad.objects.all()
     return render(request, 'student_abroad/student_list.html', {"students": students, "employee": employee})
@@ -121,6 +152,8 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(StudentDetailView, self).get_context_data(**kwargs)
         context['documents'] = StudentDocuments.objects.filter(student=self.kwargs['pk'])
+        context['phone_numbers'] = StudentPhoneNumber.objects.filter(student=self.kwargs['pk'])
+        context['student_parents'] = StudentParent.objects.filter(student=self.kwargs['pk'])
         return context
 
 
@@ -247,3 +280,4 @@ def document_delete(request, pk):
         student = document.student
         document.delete()
     return redirect('student-detail', student.user_id)
+

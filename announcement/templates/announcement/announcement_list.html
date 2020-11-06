@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список конкурсов{% endblock pagename %}
+{% block title %}Список конкурсов{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'announcement-create' %}"><i
+    class="fas fa-plus"></i> Добавить</a>
+{#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
+{#    class="fas fa-upload"></i> Импорт</a>#}
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="announcementtable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название конкурса</th>
+        <th>Дата оздания</th>
+        <th>Дата начала</th>
+        <th>Дата окончания</th>
+        <th>Страна</th>
+        <th>Статус</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for announcement in announcements %}
+        <tr class='clickable-row' data-href="{% url  'announcement-detail' announcement.id %}">
+          <td>{{ forloop.counter}}</td>
+          <td>{{ announcement.title}}</td>
+          <td>{{ announcement.created_at }}</td>
+          <td>{{ announcement.beginning_date}}</td>
+          <td>{{ announcement.end_date}}</td>
+          <td>{{ announcement.destination_country}}</td>
+          <td>{{ announcement.status}}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+<script>
+    $('#announcementtable').DataTable({
+       "language": {
+        "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true
+
+    });
+</script>
+
+{% endblock morejs %}

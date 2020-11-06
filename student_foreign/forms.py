@@ -1,21 +1,22 @@
 from django import forms
 from django.db import transaction
 
+from edu_organisation.models import EduOrganisation
 from student_foreign.models import StudentForeign
 from university_local.models import University
 
-universities = University.objects.all()
+edu_organisations = EduOrganisation.objects.all()
 
 DEGREE = [
-    ('Бакалавриат', 'Бакалавриат'),
-    ('Магистратура', 'Магистратура'),
-    ('Специалитет', 'Специалитет'),
-    ('Прочее', 'Прочее')
+    ('bachelor', 'Бакалавриат'),
+    ('master', 'Магистратура'),
+    ('speciality', 'Специалитет'),
+    ('other', 'Прочее')
 ]
 
 EDU_TYPE = [
-    ('Очная', 'Очная'),
-    ('Заочная', 'Заочная')
+    ('och', 'Очная'),
+    ('zaoch', 'Заочная')
 ]
 
 class StudentAbroadCreateForm(forms.ModelForm):
@@ -24,7 +25,7 @@ class StudentAbroadCreateForm(forms.ModelForm):
     ethnical_kyrgyz = forms.BooleanField(label='Этнический кыргыз', required=False)
     education_type = forms.ChoiceField(label='Форма обучения', choices=EDU_TYPE)
     date_of_birth = forms.DateField(label='Дата рождения')
-    university = forms.ModelChoiceField(label='Место обучения', widget=forms.Select, queryset=universities)
+    edu_organisation = forms.ModelChoiceField(label='Место обучения', widget=forms.Select, queryset=edu_organisations)
     department = forms.CharField(label='Факультет/кафедра', max_length=255)
     speciality = forms.CharField(label='Программа/направление', max_length=255)
     degree = forms.ChoiceField(label='Обучение на квалификацию', choices=DEGREE)
@@ -34,7 +35,7 @@ class StudentAbroadCreateForm(forms.ModelForm):
 
     class Meta:
         model = StudentForeign
-        fields = ('full_name', 'country', 'ethnical_kyrgyz', 'education_type', 'date_of_birth', 'university',
+        fields = ('full_name', 'country', 'ethnical_kyrgyz', 'education_type', 'date_of_birth', 'edu_organisation',
                   'department', 'speciality', 'degree', 'passport_number', 'phone_number', 'address')
 
     @transaction.atomic
@@ -44,7 +45,7 @@ class StudentAbroadCreateForm(forms.ModelForm):
                                                 ethnical_kyrgyz=self.cleaned_data.get('ethnical_kyrgyz'),
                                                 education_type=self.cleaned_data.get('education_type'),
                                                 date_of_birth=self.cleaned_data.get('date_of_birth'),
-                                                university=self.cleaned_data.get('university'),
+                                                edu_organisation=self.cleaned_data.get('edu_organisation'),
                                                 department=self.cleaned_data.get('department'),
                                                 speciality=self.cleaned_data.get('speciality'),
                                                 degree=self.cleaned_data.get('degree'),
@@ -61,7 +62,7 @@ class StudentAbroadCreateFormForEmp(forms.ModelForm):
     ethnical_kyrgyz = forms.BooleanField(label='Этнический кыргыз', required=False)
     education_type = forms.ChoiceField(label='Форма обучения', choices=EDU_TYPE)
     date_of_birth = forms.DateField(label='Дата рождения')
-    university = forms.HiddenInput()
+    edu_organisation = forms.HiddenInput()
     department = forms.CharField(label='Факультет/кафедра', max_length=255)
     speciality = forms.CharField(label='Программа/направление', max_length=255)
     degree = forms.ChoiceField(label='Обучение на квалификацию', choices=DEGREE)
@@ -81,7 +82,7 @@ class StudentAbroadCreateFormForEmp(forms.ModelForm):
                                                 ethnical_kyrgyz=self.cleaned_data.get('ethnical_kyrgyz'),
                                                 education_type=self.cleaned_data.get('education_type'),
                                                 date_of_birth=self.cleaned_data.get('date_of_birth'),
-                                                university=self.university,
+                                                edu_organisation=self.edu_organisation,
                                                 department=self.cleaned_data.get('department'),
                                                 speciality=self.cleaned_data.get('speciality'),
                                                 degree=self.cleaned_data.get('degree'),
@@ -98,7 +99,8 @@ class StudentAbroadUpdateForm(forms.ModelForm):
     ethnical_kyrgyz = forms.BooleanField(label='Этнический кыргыз', required=False)
     education_type = forms.ChoiceField(label='Форма обучения', choices=EDU_TYPE)
     date_of_birth = forms.DateField(label='Дата рождения')
-    university = forms.ModelChoiceField(label='Место обучения', widget=forms.Select, queryset=universities, disabled=True)
+    edu_organisation = forms.ModelChoiceField(label='Место обучения', widget=forms.Select, queryset=edu_organisations,
+                                              disabled=True)
     department = forms.CharField(label='Факультет/кафедра', max_length=255)
     speciality = forms.CharField(label='Программа/направление', max_length=255)
     degree = forms.ChoiceField(label='Обучение на квалификацию', choices=DEGREE)
@@ -108,5 +110,5 @@ class StudentAbroadUpdateForm(forms.ModelForm):
 
     class Meta:
         model = StudentForeign
-        fields = ('full_name', 'country', 'ethnical_kyrgyz', 'education_type', 'date_of_birth', 'university',
+        fields = ('full_name', 'country', 'ethnical_kyrgyz', 'education_type', 'date_of_birth', 'edu_organisation',
                   'department', 'speciality', 'degree', 'passport_number', 'phone_number', 'address')

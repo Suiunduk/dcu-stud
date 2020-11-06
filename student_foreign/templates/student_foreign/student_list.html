@@ -8,7 +8,7 @@
         class="fas fa-plus"></i> Добавить</a>
 {#    <button id="student-create" class="btn btn-primary" type="button" name="button" data-form-url="{% url 'student-create' %}"><i class="fas fa-plus mr-2"></i>Добавить</button>#}
 {% endif %}
-{% if  user.is_authenticated and user.is_employee%}
+{% if  user.is_authenticated and user.user_type == 'university_employee'%}
     <a class="btn btn-primary" href="{% url 'student-foreign-upload' %}"><i
         class="fas fa-upload"></i> Импортировать из EXCEL</a>
     <a class="btn btn-primary" href="{% url 'student-foreign-create-emp' employee.university.id %}"><i
@@ -76,7 +76,7 @@
           </td>
           <td>{{ student.date_of_birth }}</td>
           <td>{{ student.education_type }}</td>
-          <td>{{ student.university }}</td>
+          <td>{{ student.edu_organisation }}</td>
           <td>{{ student.department }}</td>
           <td>{{ student.speciality }}</td>
           <td>{{ student.degree }}</td>

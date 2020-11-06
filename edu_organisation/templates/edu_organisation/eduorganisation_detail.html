@@ -1,0 +1,94 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block pagename %}Информация о ВУЗе{% endblock pagename %}
+{% block breadcrumb %}
+    <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
+        <i class="fas fa-print"></i>
+        Печать
+    </a>
+    <a href="{% url 'organisation-update' object.id %}" class="btn btn-tool">
+      <i class="fas fa-edit"></i>
+      Изменить данные
+    </a>
+    <a href="{% url 'organisation-delete' object.id %}" class="btn btn-tool">
+      <i class="fas fa-trash-alt"></i>
+      Удалить учебное заведение
+    </a>
+    <a class="btn btn-tool" href="{% url 'employee-create' fk=object.id %}">
+        <i class="fas fa-plus"></i>
+        Добавить сотрудника
+    </a>
+{% endblock breadcrumb %}
+{% block content %}
+    <div class="row mb-4 border-bottom">
+      <div class="col-sm-4">
+        <div class="row mb-2">
+
+          <div class="float-right">
+            <h3>{{ object.org_name }} </h3>
+            <h4>{{ object.org_code }}</h4>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+            <label class="col">
+              Фактический адрес организации
+            </label>
+            <div class="col">
+              {{ object.org_address }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Список ответственных сотрудников:</h4>
+    <div>
+             <table id="employeetable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+                <thead class="thead-light">
+                  <tr>
+                    <th>№</th>
+                    <th>Ф.И.О.</th>
+                    <th>Должность</th>
+                    <th>E-mail</th>
+                    <th>Номер телефона</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for employee in employees %}
+                    <tr class='clickable-row' data-href="{% url  'employee-detail' employee.user_id %}">
+                      <td>{{ forloop.counter}}</td>
+                      <td>{{ employee.lastname}} {{employee.firstname }} {{employee.fathersname }}</td>
+                      <td>{{ employee.position}}</td>
+                      <td>{{ employee.email}}</td>
+                      <td>{{ employee.phone_number}}</td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+          </div>
+{% endblock content %}
+
+{% block morejs %}
+
+<script>
+
+    $('#employeetable').DataTable({
+        "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true,
+        searching: false,
+        ordering: false,
+        paging: false
+    });
+
+    function print_preview() {
+        // Print the page
+        window.print();
+    }
+</script>
+{% endblock morejs %}

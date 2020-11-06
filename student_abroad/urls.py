@@ -6,6 +6,7 @@ from student_abroad.views import StudentDetailView, StudentCreateView, StudentUp
 
 urlpatterns = [
     path('signup/', views.StudentSignUpView.as_view(), name='signup'),
+    path('signup_wizard/', views.StudentSignUpWizardView.as_view(), name='signup-wizard'),
     path('list', views.student_list, name='student-list'),
     path('<int:pk>/', StudentDetailView.as_view(), name='student-detail'),
     path('create/', StudentCreateView.as_view(), name='student-create'),

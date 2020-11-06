@@ -3,12 +3,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.forms.utils import ValidationError
 
+from edu_organisation.models import EduOrganisation
 from university_employee.models import Employee
 from student_abroad.models import StudentAbroad
 from university_local.models import University
 from users.models import CustomUser
 
-universities = University.objects.all()
+edu_organisations = EduOrganisation.objects.all()
 
 
 class EmployeeSignUpForm(UserCreationForm):
@@ -18,7 +19,8 @@ class EmployeeSignUpForm(UserCreationForm):
     position = forms.CharField(label='Должность', max_length=100)
     phone_number = forms.CharField(label='Номер телефона', max_length=20)
     email = forms.EmailField(label='Email')
-    university = forms.ModelChoiceField(label='Университет', widget=forms.Select, queryset=universities, required=False)
+    edu_organisation = forms.ModelChoiceField(label='Учебное заведение', widget=forms.Select,
+                                              queryset=edu_organisations, required=False)
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -27,7 +29,7 @@ class EmployeeSignUpForm(UserCreationForm):
     @transaction.atomic
     def save(self):
         user = super(EmployeeSignUpForm, self).save(commit=False)
-        user.is_employee = True
+        user.user_type = 'university_employee'
         user.username = self.cleaned_data.get('email')
         user.save()
         employee = Employee.objects.create(user=user,
@@ -37,7 +39,7 @@ class EmployeeSignUpForm(UserCreationForm):
                                            position=self.cleaned_data.get('position'),
                                            phone_number=self.cleaned_data.get('phone_number'),
                                            email=self.cleaned_data.get('email'),
-                                           university=self.cleaned_data.get('university'))
+                                           edu_organisation=self.cleaned_data.get('edu_organisation'))
         return user
 
 
@@ -48,7 +50,7 @@ class EmployeeCreateForm(UserCreationForm):
     position = forms.CharField(label='Должность', max_length=100)
     phone_number = forms.CharField(label='Номер телефона', max_length=20)
     email = forms.EmailField(label='Email')
-    university = forms.HiddenInput()
+    edu_organisation = forms.HiddenInput()
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -57,7 +59,7 @@ class EmployeeCreateForm(UserCreationForm):
     @transaction.atomic
     def save(self):
         user = super(EmployeeCreateForm, self).save(commit=False)
-        user.is_employee = True
+        user.user_type = 'university_employee'
         user.username = self.cleaned_data.get('email')
         user.save()
         employee = Employee.objects.create(user=user,
@@ -67,7 +69,7 @@ class EmployeeCreateForm(UserCreationForm):
                                            position=self.cleaned_data.get('position'),
                                            phone_number=self.cleaned_data.get('phone_number'),
                                            email=self.cleaned_data.get('email'),
-                                           university=self.university)
+                                           edu_organisation=self.edu_organisation)
         return user
 
 

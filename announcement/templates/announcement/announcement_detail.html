@@ -1,0 +1,215 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block pagename %}Информация о Конкурсе{% endblock pagename %}
+{% block breadcrumb %}
+    <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
+        <i class="fas fa-print"></i>
+        Печать
+    </a>
+    <a href="{% url 'announcement-update' object.id %}" class="btn btn-tool">
+      <i class="fas fa-edit"></i>
+      Изменить данные
+    </a>
+    <a href="{% url 'announcement-delete' object.id %}" class="btn btn-tool">
+      <i class="fas fa-trash-alt"></i>
+      Удалить конкурс
+    </a>
+{% endblock breadcrumb %}
+{% block content %}
+
+     <div class="col-12 col-sm-12">
+            <div class="card card-primary card-outline card-tabs">
+              <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">Информация</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">Прикрепленные документы</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-three-tabContent">
+                  <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
+                       <div class="row mb-4 border-bottom">
+                          <div class="col-sm-4">
+                            <div class="row mb-2">
+
+                              <div class="float-right">
+                                <h3>{{ object.title }} </h3>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="col-sm-8">
+                            <div>
+                              <div class="form-group row">
+                                <div class="col">
+                                  {{ object.description }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-8">
+                            <div>
+                              <div class="form-group row">
+                                <label class="col">
+                                    Дата создания:
+                                </label>
+                                <div class="col">
+                                  {{ object.created_at }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-8">
+                            <div>
+                              <div class="form-group row">
+                                <label class="col">
+                                    Дата начала:
+                                </label>
+                                <div class="col">
+                                  {{ object.beginning_date }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-8">
+                            <div>
+                              <div class="form-group row">
+                                <label class="col">
+                                    Дата окончания:
+                                </label>
+                                <div class="col">
+                                  {{ object.end_date }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-8">
+                            <div>
+                              <div class="form-group row">
+                                <label class="col">
+                                    Страна:
+                                </label>
+                                <div class="col">
+                                  {{ object.destination_country }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-8">
+                            <div>
+                              <div class="form-group row">
+                                <label class="col">
+                                    Статус:
+                                </label>
+                                <div class="col">
+                                  {{ object.status }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                       </div>
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                    <div class="card-header">
+                      <div class="card-tools">
+                            <a href="{% url 'an-document-upload' object.id %}" class="btn btn-tool">
+                              <i class="fas fa-file"></i>
+                              Добавить документ
+                            </a>
+                      </div>
+                    </div>
+                    <div>
+                             <table id="documentstable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+                                <thead class="thead-light">
+                                  <tr>
+                                    <th>№</th>
+                                    <th>Наименование</th>
+                                    <th>Добавлено</th>
+                                    <th>Обновлено</th>
+                                    <th>Скачать</th>
+                                    <th>Удалить</th>
+
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                  {% for document in documents %}
+                                    <tr class='clickable-row' data-href="{% url 'an-document-detail' document.id %}">
+                                      <td>{{ forloop.counter}}</td>
+                                      <td>{{ document.name}}</td>
+                                      <td>{{ document.document_file_created_at}}</td>
+                                      <td>{{ document.document_file_updated_at}}</td>
+                                      <td>
+                                          <a class="btn btn-primary" href="{{ document.file.url }}">Скачать</a>
+                                      </td>
+                                    <td>
+                                          <form method="post" action="{% url 'an-document-delete' document.id %}">
+                                              {% csrf_token %}
+                                              <button class="btn btn-danger" type="submit">Удалить</button>
+                                          </form>
+                                      </td>
+                                    </tr>
+                                  {% endfor %}
+
+                                </tbody>
+                              </table>
+                          </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+
+
+{#    <h4>Список ответственных сотрудников:</h4>#}
+{#    <div>#}
+{#             <table id="employeetable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>#}
+{#                <thead class="thead-light">#}
+{#                  <tr>#}
+{#                    <th>№</th>#}
+{#                    <th>Ф.И.О.</th>#}
+{#                    <th>Должность</th>#}
+{#                    <th>E-mail</th>#}
+{#                    <th>Номер телефона</th>#}
+{#                  </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{##}
+{#                  {% for employee in employees %}#}
+{#                    <tr class='clickable-row' data-href="{% url  'employee-detail' employee.user_id %}">#}
+{#                      <td>{{ forloop.counter}}</td>#}
+{#                      <td>{{ employee.lastname}} {{employee.firstname }} {{employee.fathersname }}</td>#}
+{#                      <td>{{ employee.position}}</td>#}
+{#                      <td>{{ employee.email}}</td>#}
+{#                      <td>{{ employee.phone_number}}</td>#}
+{#                    </tr>#}
+{#                  {% endfor %}#}
+{##}
+{#                </tbody>#}
+{#              </table>#}
+{#          </div>#}
+{% endblock content %}
+
+{% block morejs %}
+
+<script>
+
+    $('#employeetable').DataTable({
+        "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true,
+        searching: false,
+        ordering: false,
+        paging: false
+    });
+
+    function print_preview() {
+        // Print the page
+        window.print();
+    }
+</script>
+{% endblock morejs %}

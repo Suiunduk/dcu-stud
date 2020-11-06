@@ -27,8 +27,10 @@ urlpatterns = [
     path('student_abroad/', include('student_abroad.urls')),
     path('student_foreign/', include('student_foreign.urls')),
     path('university_local/', include('university_local.urls')),
+    path('edu_organisation/', include('edu_organisation.urls')),
     path('university_employee/', include('university_employee.urls')),
     path('accounts/', include('users.urls')),
+    path('announcements/', include('announcement.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

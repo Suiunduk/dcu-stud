@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+from edu_organisation.models import EduOrganisation
 from university_local.models import University
 
 
@@ -10,7 +11,7 @@ class StudentForeign(models.Model):
     ethnical_kyrgyz = models.BooleanField(default=False)
     education_type = models.CharField(max_length=255, default="Очное")
     date_of_birth = models.DateField()
-    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    edu_organisation = models.ForeignKey(EduOrganisation, on_delete=models.CASCADE)
     department = models.CharField(max_length=255)
     speciality = models.CharField(max_length=255)
     degree = models.CharField(max_length=255)

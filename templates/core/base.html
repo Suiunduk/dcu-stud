@@ -72,14 +72,14 @@
           <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-             {% if  user.is_authenticated and user.is_student%}
+             {% if  user.is_authenticated and user.user_type == 'student_abroad'%}
                 <li class="nav-item">
                   <a href="{% url 'email-send'%}" class="nav-link">
-                    <i class="nav-icon fas fa-envelope"></i>Обратная связь
+                    <i class="nav-icon fas fa-envelope"></i> Обратная связь
                   </a>
                 </li>
             {% endif %}
-            {% if  user.is_authenticated and user.is_employee%}
+            {% if  user.is_authenticated and user.user_type == 'university_employee'%}
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" >
                       <i class="nav-icon fas fa-users"></i> Студенты
@@ -114,7 +114,12 @@
                     </a>
                     <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
                       <li class="nav-item">
-                        <a href="{% url 'universities-list' %}" class="dropdown-item">
+                        <a href="{% url 'announcement-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-book-open"></i> Конкурсы
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'organisations-list' %}" class="dropdown-item">
                             <i class="nav-icon fas fa-graduation-cap"></i> Учебные заведения КР
                         </a>
                       </li>
@@ -133,12 +138,12 @@
                 <span class="badge badge-danger navbar-badge"></span>
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                {% if  user.is_authenticated and user.is_student %}
+                {% if  user.is_authenticated and user.user_type == 'student_abroad' %}
                     <a href="{% url 'student-detail' user.id%}" class="dropdown-item">
                       <i class="fas fa-user mr-2"></i>
                         Профиль
                     </a>
-                {% elif user.is_authenticated and user.is_employee %}
+                {% elif user.is_authenticated and user.user_type == 'university_employee' %}
                     <a href="{% url 'employee-detail' user.id%}" class="dropdown-item">
                       <i class="fas fa-user mr-2"></i>
                         Профиль
@@ -184,7 +189,7 @@
                 <hr style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
             </li>
 
-            {% if  user.is_authenticated and user.is_student%}
+            {% if  user.is_authenticated and user.user_type == 'student_abroad'%}
                 <li class="nav-item">
                   <a href="{% url 'email-send'%}" class="nav-link">
                     <i class="nav-icon fas fa-envelope"></i>
@@ -194,7 +199,7 @@
                   </a>
                 </li>
             {% endif %}
-            {% if  user.is_authenticated and user.is_employee%}
+            {% if  user.is_authenticated and user.user_type == 'university_employee'%}
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                       <i class="nav-icon fas fa-users"></i>

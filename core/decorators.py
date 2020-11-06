@@ -8,7 +8,7 @@ def student_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, log
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_student,
+        lambda u: u.is_active and u.user_type == 'student_abroad',
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
@@ -23,7 +23,7 @@ def employee_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, lo
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_employee,
+        lambda u: u.is_active and u.user_type == 'university_employee',
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
@@ -53,7 +53,7 @@ def super_or_emp_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_superuser or u.is_employee,
+        lambda u: u.is_active and u.is_superuser or u.user_type == 'university_employee',
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )

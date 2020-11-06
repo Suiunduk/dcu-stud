@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 
 from core.models import ParentType, Gender, TypeOfApplying, Country, EducationProgram, EducationForm, Status
+from edu_organisation.models import EduOrganisation
 from university_local.models import University
 from users.models import CustomUser
 
@@ -17,9 +18,7 @@ class StudentAbroad(models.Model):
     date_of_birth = models.DateField()
     gender = models.ForeignKey(Gender, on_delete=models.CASCADE)
 
-    university = models.ForeignKey(University, on_delete=models.CASCADE, null=True)
-    college = models.CharField(max_length=255, blank=True)
-    school = models.CharField(max_length=255, blank=True)
+    edu_organisation = models.ForeignKey(EduOrganisation, on_delete=models.CASCADE, null=True)
 
     type_of_applying = models.ForeignKey(TypeOfApplying, on_delete=models.CASCADE)
     education_country = models.ForeignKey(Country, on_delete=models.CASCADE)
@@ -27,7 +26,6 @@ class StudentAbroad(models.Model):
     year_of_applying = models.DateField(default=timezone.now)
     education_program = models.ForeignKey(EducationProgram, on_delete=models.CASCADE)
     education_period_years = models.IntegerField()
-    education_period_months = models.IntegerField()
     speciality = models.CharField(max_length=255)
     education_form = models.ForeignKey(EducationForm, on_delete=models.CASCADE)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
@@ -62,19 +60,12 @@ class StudentParent(models.Model):
     lastname = models.CharField(max_length=255)
     firstname = models.CharField(max_length=255)
     fathersname = models.CharField(max_length=255, blank=True)
-    parent_type = models.ForeignKey(StudentAbroad, on_delete=models.CASCADE)
-    student = models.ForeignKey(ParentType, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=255)
+    parent_type = models.ForeignKey(ParentType, on_delete=models.CASCADE)
+    student = models.ForeignKey(StudentAbroad, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.lastname} {self.firstname} {self.fathersname}'
-
-
-class StudentParentPhoneNumber(models.Model):
-    phone_number = models.CharField(max_length=255)
-    parent = models.ForeignKey(StudentParent, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.phone_number)
 
 
 class StudentDocuments(models.Model):

@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 
+from edu_organisation.models import EduOrganisation
 from university_employee.forms import EmployeeSignUpForm, EmployeeCreateForm, EmployeeUpdateForm
 from university_employee.models import Employee
 from university_local.models import University
@@ -45,8 +46,8 @@ class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return form
 
     def form_valid(self, form):
-        university = University.objects.get(id=self.kwargs['fk'])
-        form.university = university
+        edu_organisation = EduOrganisation.objects.get(id=self.kwargs['fk'])
+        form.edu_organisation = edu_organisation
         user = form.save()
         return redirect('employee-detail', user.id)
 
