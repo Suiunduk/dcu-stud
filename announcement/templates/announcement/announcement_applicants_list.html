@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список участников конкурса{% endblock pagename %}
+{% block title %}Список участников конкурса{% endblock title %}
+
+{% block breadcrumb %}
+{#<a class="btn btn-primary" href="{% url 'announcement-create' %}"><i#}
+{#    class="fas fa-plus"></i> Добавить</a>#}
+{#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
+{#    class="fas fa-upload"></i> Импорт</a>#}
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="applicanttable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Ф.И.О.</th>
+        <th>Дата рождения</th>
+        <th>Статус</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for applicant in applicants %}
+        <tr>
+          <td>{{ forloop.counter}}</td>
+          <td>{{ applicant.applicant.last_name}} {{ applicant.applicant.first_name}} {{ applicant.applicant.studentapplicant.fathersname}}</td>
+          <td>{{ applicant.applicant.studentapplicant.date_of_birth }}</td>
+            {% if applicant.status == 'not_confirmed' %}
+                <td class="alert-danger alert-dismissible">
+                     <i class="icon fas fa-ban"></i> Не подтверждено
+                </td>
+            {% elif applicant.status == 'waiting' %}
+                <td  class="alert-warning alert-dismissible">
+                    <i class="icon fas fa-exclamation-triangle"></i> В ожидании
+                </td>
+            {% elif applicant.status == 'confirmed' %}
+                <td class="alert-success alert-dismissible">
+                    <i class="icon fas fa-check"></i> Подтверждено
+                </td>
+            {% endif %}
+            <td style="text-align: center">
+                {% if applicant.status == 'confirmed' %}
+                   <a class="btn-sm btn-danger" href="{% url  'reject-applicant' applicant.id%}">Отменить подтверждение</a>
+                {% elif applicant.status == 'waiting' %}
+                    <a class="btn-sm btn-success" href="{% url  'confirm-applicant' applicant.id%}">Подтвердить</a>
+                    <a class="btn-sm btn-danger" href="{% url  'reject-applicant' applicant.id%}">Отклонить</a>
+                {% else %}
+                    {% if not applicant.rejection_reason %}
+                        Информация не заполнена до конца
+                    {% else %}
+                        {{ applicant.rejection_reason }}
+                    {% endif %}
+            {% endif %}
+            </td>
+
+            <td style="text-align: center">
+                {% if applicant.applicant.studentapplicant %}
+                    <a class="btn-sm btn-primary" href="{% url  'student-applicant-detail' applicant.applicant.id%}">Подробнее</a>
+                {% endif %}
+            </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+<script>
+    $('#applicanttable').DataTable({
+       "language": {
+        "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
+        "scrollX": true
+
+    });
+</script>
+
+{% endblock morejs %}

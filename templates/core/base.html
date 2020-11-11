@@ -72,11 +72,30 @@
           <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-             {% if  user.is_authenticated and user.user_type == 'student_abroad'%}
+             {% if  user.is_authenticated and user.user_type == 'student_abroad' %}
                 <li class="nav-item">
                   <a href="{% url 'email-send'%}" class="nav-link">
                     <i class="nav-icon fas fa-envelope"></i> Обратная связь
                   </a>
+                </li>
+            {% endif %}
+            {% if user.is_authenticated and user.user_type == 'student_applicant'%}
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" >
+                        <i class="nav-icon fas fa-list"></i>  Конкурсы
+                    </a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                      <li class="nav-item">
+                        <a href="{% url 'applicant-announcements-list' user.id %}" class="dropdown-item">
+                            Мои конкурсы
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'all-announcements-list' user.id %}" class="dropdown-item">
+                            Все актуальные конкурсы
+                        </a>
+                      </li>
+                    </ul>
                 </li>
             {% endif %}
             {% if  user.is_authenticated and user.user_type == 'university_employee'%}
@@ -145,6 +164,11 @@
                     </a>
                 {% elif user.is_authenticated and user.user_type == 'university_employee' %}
                     <a href="{% url 'employee-detail' user.id%}" class="dropdown-item">
+                      <i class="fas fa-user mr-2"></i>
+                        Профиль
+                    </a>
+                {% elif user.is_authenticated and user.user_type == 'student_applicant' %}
+                    <a href="{% url 'student-applicant-detail' user.id%}" class="dropdown-item">
                       <i class="fas fa-user mr-2"></i>
                         Профиль
                     </a>

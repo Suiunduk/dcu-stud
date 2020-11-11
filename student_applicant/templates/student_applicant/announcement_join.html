@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load widget_tweaks %}
+{% block pagename %}Подтверждение подачи заявки на участие в конкурсе{% endblock pagename %}
+{% block title %}Подтверждение подачи заявки на участие в конкурсе{% endblock title %}
+
+{% block breadcrumb %}
+
+{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="alert alert-info alert-dismissible">
+             <h5><i class="icon fas fa-info"></i> Предупреждение!</h5>
+             Пожалуйста, перед тем как подавать заявление на участие в конкурсе, убедитесь в том что вы подходите
+             по всем критериям отбора и вы загрузили все необходимые документы для отбора.
+    </div>
+    <form method="POST" role="form" >
+    {% csrf_token %}
+        <div class="col-lg-12 col-md-12">
+        {{ form.agreement | add_class:"mr-2 ml-3" }}
+        <label for="{{ form.agreement.auto_id }}">{{ form.agreement.label }}</label>
+        </div>
+        <input type="submit" class="btn btn-primary mt-3" value="Подтвердить">
+    </form>
+{% endblock content %}
+
+
+{% block morejs %}
+
+{% endblock morejs %}

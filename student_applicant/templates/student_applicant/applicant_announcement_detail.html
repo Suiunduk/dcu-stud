@@ -1,0 +1,140 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block pagename %}Информация о Конкурсе{% endblock pagename %}
+{% block breadcrumb %}
+    <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
+        <i class="fas fa-print"></i>
+        Печать
+    </a>
+{#    <a href="{% url 'announcement-delete' object.id %}" class="btn btn-tool">#}
+{#      <i class="fas fa-trash-alt"></i>#}
+{#      Отказаться от участия#}
+{#    </a>#}
+{% endblock breadcrumb %}
+{% block content %}
+
+    <div class="row mb-4 border-bottom">
+        <div class="col-sm-4">
+            <div class="row mb-2">
+
+              <div class="float-right">
+                <h3>{{ object.title }} </h3>
+              </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div>
+              <div class="form-group row">
+                <div class="col">
+                  {{ object.description }}
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+            <label class="col">
+                Дата создания:
+            </label>
+            <div class="col">
+              {{ object.created_at }}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+            <label class="col">
+                Дата начала:
+            </label>
+            <div class="col">
+              {{ object.beginning_date }}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+            <label class="col">
+                Дата окончания:
+            </label>
+            <div class="col">
+              {{ object.end_date }}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+            <label class="col">
+                Страна:
+            </label>
+            <div class="col">
+              {{ object.destination_country }}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+            <label class="col">
+                Статус:
+            </label>
+            <div class="col">
+              {{ object.status }}
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+    <h4>Прикрепленные документы:</h4>
+    <div style="overflow-x: auto">
+        <table id="documentstable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+            <thead class="thead-light">
+              <tr>
+                <th>№</th>
+                <th>Наименование</th>
+                <th>Скачать</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for document in documents %}
+                <tr>
+                  <td>{{ forloop.counter}}</td>
+                  <td>{{ document.name}}</td>
+                  <td>
+                      <a class="btn btn-primary" href="{{ document.file.url }}">Скачать</a>
+                  </td>
+                </tr>
+              {% endfor %}
+
+            </tbody>
+      </table>
+    </div>
+    <h4>Дополнительные документы которые необходимо загрузить для участия:</h4>
+    <div class="col-md-12 col-lg-12">
+      {% for document in additional_docs %}
+          <div class="col-lg-3 callout callout-danger">
+            <h5><i class="fa fa-asterisk" style="color: #bd0c1f"></i> {{ document.name}}</h5>
+          </div>
+      {% endfor %}
+    </div>
+
+{% endblock content %}
+
+{% block morejs %}
+
+<script>
+
+    function print_preview() {
+        // Print the page
+        window.print();
+    }
+</script>
+{% endblock morejs %}

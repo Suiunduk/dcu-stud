@@ -19,6 +19,7 @@ edu_programs = EducationProgram.objects.all()
 edu_forms = EducationForm.objects.all()
 parent_types = ParentType.objects.all()
 
+
 #
 # STATUS = [
 #     ('Зачислен', 'Зачислен'),
@@ -91,7 +92,7 @@ class StudentSignUpForm(UserCreationForm):
     date_of_birth = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget)
     gender = forms.ModelChoiceField(label='Пол', widget=forms.Select, queryset=genders)
     edu_organisation = forms.ModelChoiceField(label='Предыдущее место обучения', widget=forms.Select, queryset=edu_orgs,
-                                        required=False)
+                                              required=False)
     type_of_applying = forms.ModelChoiceField(label='Линия поступления', widget=forms.Select,
                                               queryset=types_of_applying)
     education_country = forms.ModelChoiceField(label='Страна обучения', widget=forms.Select, queryset=countries)
@@ -384,3 +385,7 @@ class DocumentUploadForm(forms.ModelForm):
                                                            description=self.cleaned_data.get('description'),
                                                            file=self.cleaned_data.get('file'),
                                                            student=self.student)
+
+
+class ConfirmForm(forms.Form):
+    agreement = forms.BooleanField(label='Все необходимые для конкурса документы присутствуют')

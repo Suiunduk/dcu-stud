@@ -1,0 +1,64 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список моих конкурсов{% endblock pagename %}
+{% block title %}Список моих конкурсов{% endblock title %}
+
+{% block breadcrumb %}
+{#<a class="btn btn-primary" href="{% url 'announcement-create' %}"><i#}
+{#    class="fas fa-plus"></i> Добавить</a>#}
+{#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
+{#    class="fas fa-upload"></i> Импорт</a>#}
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="applicanttable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th>Дата начала</th>
+        <th>Дата окончания</th>
+        <th>Мой статус</th>
+        <th>Действие</th>
+        <th>Подробнее</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for announcement in announcements %}
+        <tr>
+          <td>{{ forloop.counter}}</td>
+          <td>{{ announcement.announcement.title }}</td>
+          <td>{{ announcement.announcement.beginning_date }}</td>
+          <td>{{ announcement.announcement.end_date }}</td>
+            {% if announcement.status == 'not_confirmed' %}
+                <td class="alert-danger alert-dismissible">
+                     <i class="icon fas fa-ban"></i> Не подтверждено
+                </td>
+            {% elif announcement.status == 'waiting' %}
+                <td  class="alert-warning alert-dismissible">
+                    <i class="icon fas fa-exclamation-triangle"></i> На рассмотрении
+                </td>
+            {% elif announcement.status == 'confirmed' %}
+                <td class="alert-success alert-dismissible">
+                    <i class="icon fas fa-check"></i> Подтверждено
+                </td>
+            {% endif %}
+            <td style="text-align: center">
+                {% if announcement.status == 'not_confirmed' %}
+                    <a class="btn-sm btn-warning" href="{% url  'student-applicant-announcement-change' announcement.announcement.id%}">Запросить пересмотр</a>
+                {% endif %}
+            </td>
+            <td style="text-align: center">
+                 <a class="btn-sm btn-primary" href="{% url  'student-applicant-announcement-detail' announcement.announcement.id%}">Подробнее</a>
+            </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+
+{% endblock morejs %}

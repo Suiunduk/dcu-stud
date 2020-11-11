@@ -6,6 +6,10 @@
         <i class="fas fa-print"></i>
         Печать
     </a>
+    <a href="{% url 'announcement-applicants-list' object.id %}" class="btn btn-tool">
+      <i class="fas fa-users"></i>
+      Список участников
+    </a>
     <a href="{% url 'announcement-update' object.id %}" class="btn btn-tool">
       <i class="fas fa-edit"></i>
       Изменить данные
@@ -18,7 +22,7 @@
 {% block content %}
 
      <div class="col-12 col-sm-12">
-            <div class="card card-primary card-outline card-tabs">
+            <div class="card card-dark card-outline card-tabs">
               <div class="card-header p-0 pt-1 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
                   <li class="nav-item">
@@ -26,6 +30,9 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">Прикрепленные документы</a>
+                  </li>
+                   <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-info-tab" data-toggle="pill" href="#custom-tabs-three-info" role="tab" aria-controls="custom-tabs-three-info" aria-selected="false">Список дополнительных документов</a>
                   </li>
                 </ul>
               </div>
@@ -122,7 +129,7 @@
                             </a>
                       </div>
                     </div>
-                    <div>
+                    <div style="overflow-x: auto">
                              <table id="documentstable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
                                 <thead class="thead-light">
                                   <tr>
@@ -148,6 +155,43 @@
                                       </td>
                                     <td>
                                           <form method="post" action="{% url 'an-document-delete' document.id %}">
+                                              {% csrf_token %}
+                                              <button class="btn btn-danger" type="submit">Удалить</button>
+                                          </form>
+                                      </td>
+                                    </tr>
+                                  {% endfor %}
+
+                                </tbody>
+                              </table>
+                          </div>
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-three-info" role="tabpanel" aria-labelledby="custom-tabs-three-info-tab">
+                    <div class="card-header">
+                      <div class="card-tools">
+                            <a href="{% url 'add-document-create' object.id %}" class="btn btn-tool">
+                              <i class="fas fa-file"></i>
+                              Добавить документ
+                            </a>
+                      </div>
+                    </div>
+                    <div style="overflow-x: auto">
+                             <table id="documentstable2" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+                                <thead class="thead-light">
+                                  <tr>
+                                    <th>№</th>
+                                    <th>Наименование</th>
+                                    <th>Удалить</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                  {% for document in additional_docs %}
+                                    <tr class='clickable-row' data-href="{% url 'add-document-detail' document.id %}">
+                                      <td>{{ forloop.counter}}</td>
+                                      <td>{{ document.name}}</td>
+                                      <td>
+                                          <form method="post" action="{% url 'add-document-delete' document.id %}">
                                               {% csrf_token %}
                                               <button class="btn btn-danger" type="submit">Удалить</button>
                                           </form>
@@ -198,14 +242,6 @@
 {% block morejs %}
 
 <script>
-
-    $('#employeetable').DataTable({
-        "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
-        "scrollX": true,
-        searching: false,
-        ordering: false,
-        paging: false
-    });
 
     function print_preview() {
         // Print the page

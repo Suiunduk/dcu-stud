@@ -273,6 +273,7 @@ class DocumentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 def document_delete(request, pk):
+    student = None
     user = request.user
     customUser = CustomUser.objects.get(pk=user.id)
     if request.method == 'POST':

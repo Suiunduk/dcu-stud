@@ -17,5 +17,8 @@ class EduOrganisation(models.Model):
     org_address = models.CharField(max_length=255, verbose_name=_("Адрес учреждения"), blank=True)
     org_type = models.CharField(choices=ORG_TYPE_CHOICES, max_length=255, verbose_name=_("Тип учреждения"))
 
+    def __str__(self):
+        return str(self.org_name)
+
     def get_absolute_url(self):
         return reverse('organisation-detail', kwargs={'pk': self.pk})

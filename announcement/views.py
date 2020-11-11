@@ -8,8 +8,10 @@ from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
-from announcement.forms import DocumentUploadForm
-from announcement.models import Announcement, AnnouncementDocument
+from announcement.forms import DocumentUploadForm, AdditionalDocumentCreateForm, RejectForm
+from announcement.models import Announcement, AnnouncementDocument, AnnouncementAdditionalDocumentNames, \
+    AnnouncementApplicants
+from core.decorators import superuser_required
 
 
 @login_required
@@ -25,6 +27,7 @@ class AnnouncementDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(AnnouncementDetailView, self).get_context_data(**kwargs)
         context['documents'] = AnnouncementDocument.objects.filter(announcement=self.kwargs['pk'])
+        context['additional_docs'] = AnnouncementAdditionalDocumentNames.objects.filter(announcement=self.kwargs['pk'])
         return context
 
 
@@ -89,9 +92,85 @@ class DocumentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 def document_delete(request, pk):
+    announcement = None
     user = request.user
     if request.method == 'POST':
         document = AnnouncementDocument.objects.get(id=pk)
         announcement = document.announcement
         document.delete()
     return redirect('announcement-detail', announcement.id)
+
+
+class AdditionalDocumentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = AnnouncementAdditionalDocumentNames
+    form_class = AdditionalDocumentCreateForm
+    success_message = "Документ добавлен успешно"
+
+    def get_form(self, **kwargs):
+        form = super(AdditionalDocumentCreateView, self).get_form()
+        return form
+
+    def form_valid(self, form):
+        announcement = Announcement.objects.get(id=self.kwargs['pk'])
+        form.announcement = announcement
+        user = form.save()
+        return redirect('announcement-detail', announcement.id)
+
+
+class AdditionalDocumentDetailView(LoginRequiredMixin, DetailView):
+    model = AnnouncementAdditionalDocumentNames
+    template_name = "announcement/announcement_announcementadditionaldocumentnames_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AdditionalDocumentDetailView, self).get_context_data(**kwargs)
+        return context
+
+
+class AdditionalDocumentUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = AnnouncementAdditionalDocumentNames
+    fields = ['name', 'description', ]
+    success_message = "Документ успешно обновлен"
+
+    def get_form(self, **kwargs):
+        form = super(AdditionalDocumentUpdateView, self).get_form()
+        return form
+
+
+def additional_document_delete(request, pk):
+    announcement = None
+    user = request.user
+    if request.method == 'POST':
+        document = AnnouncementAdditionalDocumentNames.objects.get(id=pk)
+        announcement = document.announcement
+        document.delete()
+    return redirect('announcement-detail', announcement.id)
+
+
+@superuser_required
+def announcement_applicants_list(request, pk):
+    announcement = Announcement.objects.get(id=pk)
+    announcement_applicants = AnnouncementApplicants.objects.filter(announcement=announcement)
+
+    return render(request, 'announcement/announcement_applicants_list.html', {"applicants": announcement_applicants})
+
+
+def reject_applicant(request, pk):
+    if request.method == 'POST':
+        form = RejectForm(request.POST)
+        if form.is_valid():
+            announcement_applicants = AnnouncementApplicants.objects.get(id=pk)
+            rejection_reason = request.POST.get('rejection_reason')
+            announcement_applicants.status = 'not_confirmed'
+            announcement_applicants.rejection_reason = rejection_reason
+            announcement_applicants.save()
+            return redirect('announcement-applicants-list', announcement_applicants.announcement.id)
+    else:
+        form = RejectForm()
+    return render(request, 'announcement/announcement_applicants_reject.html', {'form': form})
+
+
+def confirm_applicant(request, pk):
+    announcement_applicants = AnnouncementApplicants.objects.get(id=pk)
+    announcement_applicants.status = 'confirmed'
+    announcement_applicants.save()
+    return redirect('announcement-applicants-list', announcement_applicants.announcement.id)

@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список моих конкурсов{% endblock pagename %}
+{% block title %}Список моих конкурсов{% endblock title %}
+
+{% block breadcrumb %}
+{#<a class="btn btn-primary" href="{% url 'announcement-create' %}"><i#}
+{#    class="fas fa-plus"></i> Добавить</a>#}
+{#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
+{#    class="fas fa-upload"></i> Импорт</a>#}
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="announcementtable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th>Дата начала</th>
+        <th>Дата окончания</th>
+        <th>Действие</th>
+        <th>Подробнее</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for announcement in announcements %}
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{ announcement.title }}</td>
+            <td>{{ announcement.beginning_date }}</td>
+            <td>{{ announcement.end_date }}</td>
+            <td style="text-align: center">
+                 <a class="btn-sm btn-success" href="{% url  'apply-for-announcement' announcement.id%}">Заявка на участие</a>
+            </td>
+            <td style="text-align: center">
+                 <a class="btn-sm btn-primary" href="{% url  'student-applicant-announcement-detail' announcement.id%}">Подробнее</a>
+            </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+
+{% endblock morejs %}

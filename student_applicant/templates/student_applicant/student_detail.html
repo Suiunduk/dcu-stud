@@ -1,0 +1,249 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block pagename %}Информация о студенте{% endblock pagename %}
+{% block breadcrumb %}
+    {% if  user.is_authenticated and  user.user_type == 'student_applicant'%}
+        <a href="{% url 'student-applicant-update' object.user_id %}" class="btn btn-tool">
+          <i class="fas fa-edit"></i>
+          Изменить данные
+        </a>
+    {% elif user.is_authenticated and user.is_superuser%}
+        <a href="#" onclick="print_preview(); return false;" class="btn btn-tool">
+            <i class="fas fa-print"></i>
+            Печать
+        </a>
+        <a href="{% url 'student-applicant-update' object.user_id %}" class="btn btn-tool">
+          <i class="fas fa-edit"></i>
+          Изменить данные
+        </a>
+        <a href="{% url 'student-applicant-delete' object.user_id%}" class="btn btn-tool">
+          <i class="fas fa-trash-alt"></i>
+          Удалить студента
+        </a>
+    {% endif %}
+{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="row mb-4">
+      <div class="col-sm-4 border-right">
+        <div class="row mb-2">
+
+          {% if object.profile_photo %}
+            <img
+              src="{{ object.profile_photo.url }}"
+              class="float-left rounded-circle border mr-3" style="width: 150px; height: 150px; object-fit: cover; ">
+          {% else %}
+            <img
+              src="{% static 'dist/img/avatar.png' %}"
+              class="float-left rounded-circle border mr-3" style="width: 150px; height: 150px;">
+          {% endif %}
+
+
+          <div class="float-right">
+            <h4>{{ object.lastname }}</h4>
+            <h4>{{ object.firstname }}</h4>
+            {% if not object.fathersname == None %}
+            <h4>{{ object.fathersname }}</h4>
+            {% endif %}
+
+          </div>
+        </div>
+
+        <h6><b>Email:</b> {{ object.email }}</h6>
+        <h6><b>Номер телефона:</b> {{ object.phone_number1 }}</h6>
+        {% if object.phone_number2 %}
+        <h6><b>Доп. номер телефона:</b>{{ object.phone_number2 }}</h6>
+        {% endif %}
+        <h6><b>Гражданство:</b> {{ object.citizenship }}</h6>
+        <h6><b>Адрес проживания:</b> {{ object.address }}</h6>
+
+      </div>
+      <div class="col-sm-8">
+        <div>
+          <div class="form-group row">
+              <h3 class="ml-5">Личные данные</h3>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Дата рождения
+            </label>
+            <div class="col">
+              {{ object.date_of_birth }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Пол
+            </label>
+            <div class="col">
+              {{ object.gender }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              ИНН
+            </label>
+            <div class="col">
+              {{ object.pin_code }}
+            </div>
+          </div>
+          {% if object.other %}
+              <div class="form-group border-bottom row">
+                <label class="col">
+                  Предыдущее место образования
+                </label>
+                <div class="col">
+                  {{ object.edu_organisation_other }}
+                </div>
+              </div>
+          {% else %}
+              <div class="form-group border-bottom row">
+                <label class="col">
+                  Предыдущее место образования
+                </label>
+                <div class="col">
+                  {{ object.edu_organisation }}
+                </div>
+              </div>
+          {% endif %}
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Дата окончания
+            </label>
+            <div class="col">
+              {{ object.graduation_date }}
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Знание иностранного языка
+            </label>
+            <div class="col" style="text-align: center">
+              {{ object.foreign_language_level }}
+            </div>
+            <div class="col">
+              <a href="{{ object.foreign_language_level_document.url }}"><i class="fa fa-download"></i> Просмотр документа</a>
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Средняя оценка успеваемости
+            </label>
+            <div class="col" style="text-align: center">
+              {{ object.average_mark }}
+            </div>
+            <div class="col">
+              <a href="{{ object.average_mark_document.url }}"><i class="fa fa-download"></i> Просмотр документа</a>
+            </div>
+          </div>
+
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Состав семьи
+            </label>
+            <div class="col" style="text-align: center">
+              {{ object.family_members }}
+            </div>
+            <div class="col">
+              <a href="{{ object.family_members_document.url }}"><i class="fa fa-download"></i> Просмотр документа</a>
+            </div>
+          </div>
+
+          <div class="form-group row">
+              <h3 class="ml-5">Контактные данные родственников</h3>
+          </div>
+
+          {% for parent in student_parents %}
+           <div class="form-group border-bottom row">
+            <label class="col">
+              ФИО родственника
+            </label>
+            <div class="col">
+              {{ parent.lastname }} {{ parent.firstname }} {{ parent.fathersname }}
+            </div>
+          </div>
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Телефонные номера родственника:
+            </label>
+            <div class="col">
+              {{ parent.phone_number }}
+            </div>
+          </div>
+          <div class="form-group border-bottom row">
+            <label class="col">
+              Степень родства:
+            </label>
+            <div class="col">
+              {{ parent.parent_type }}
+            </div>
+          </div>
+          {% endfor %}
+
+
+        </div>
+      </div>
+    </div>
+
+    <h4>Список прикрепленных документов студента:</h4>
+    <div class="card-header">
+      <div class="card-tools">
+            <a href="{% url 'document-applicant-upload' object.user_id %}" class="btn btn-tool">
+              <i class="fas fa-file"></i>
+              Добавить документ
+            </a>
+      </div>
+    </div>
+    <div>
+             <table id="documentstable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
+                <thead class="thead-light">
+                  <tr>
+                    <th>№</th>
+                    <th>Наименование</th>
+                    <th>Добавлено</th>
+                    <th>Обновлено</th>
+                    <th>Скачать</th>
+                    <th>Удалить</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for document in documents %}
+                    <tr class='clickable-row' data-href="{% url 'document-applicant-detail' document.id %}">
+                      <td>{{ forloop.counter}}</td>
+                      <td>{{ document.name}}</td>
+                      <td>{{ document.document_file_created_at}}</td>
+                      <td>{{ document.document_file_updated_at}}</td>
+                      <td>
+                          <a class="btn btn-primary" href="{{ document.file.url }}">Скачать</a>
+                      </td>
+                    <td>
+                          <form method="post" action="{% url 'document-applicant-delete' document.id %}">
+                              {% csrf_token %}
+                              <button class="btn btn-danger" type="submit">Удалить</button>
+                          </form>
+                      </td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+          </div>
+
+
+{% endblock content %}
+{% block morejs %}
+    <script>
+    function print_preview() {
+        // Print the page
+        window.print();
+    }
+    </script>
+{% endblock morejs %}

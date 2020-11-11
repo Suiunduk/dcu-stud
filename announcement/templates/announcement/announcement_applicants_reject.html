@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Отклонение запроса{% endblock pagename %}
+{% block title %}Отклонение запроса{% endblock title %}
+
+{% block breadcrumb %}
+{#<a class="btn btn-primary" href="{% url 'announcement-create' %}"><i#}
+{#    class="fas fa-plus"></i> Добавить</a>#}
+{#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
+{#    class="fas fa-upload"></i> Импорт</a>#}
+{% endblock breadcrumb %}
+
+{% block content %}
+    <form   method="POST" role="form" >
+    {% csrf_token %}
+        <label for="{{ form.rejection_reason.auto_id }}">{{ form.rejection_reason.label }}</label>
+        {{ form.rejection_reason }}
+        <input type="submit" class="btn btn-primary mt-3" value="Отправить">
+    </form>
+{% endblock content %}
+
+
+{% block morejs %}
+
+{% endblock morejs %}

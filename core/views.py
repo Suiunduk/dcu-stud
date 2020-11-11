@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views.generic import DetailView
 
 from announcement.models import Announcement, AnnouncementDocument
+from student_applicant.models import StudentApplicant
 from university_employee.models import Employee
 from student_abroad.models import StudentAbroad
 from student_foreign.models import StudentForeign
@@ -31,6 +32,10 @@ def homepage(request):
             students_count_for_emp = StudentAbroad.objects.filter(edu_organisation=employee.edu_organisation).count()
             return render(request, 'core/employee_homepage.html', {"students_count": students_count_for_emp})
 
+        elif customUser.user_type == 'student_applicant':
+            if not StudentApplicant.objects.filter(user=customUser.id).exists():
+                return redirect('create-applicant')
+            return render(request, 'core/student_homepage.html')
 
         else:
             return render(request, 'core/student_homepage.html')

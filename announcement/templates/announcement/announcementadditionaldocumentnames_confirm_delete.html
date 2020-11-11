@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block pagename %}Удаление документа{% endblock pagename %}
+{% block title %}
+{% endblock title %}
+
+
+{% block content %}
+
+<form action="" method="POST">
+  {% csrf_token %}
+
+  <div class="alert">
+    <p>Удалить "{{ object }}"?</p>
+    <p>Документ будет удален</p>
+  </div>
+
+  <input type="submit" class="btn btn-primary" value="Подтвердить">
+
+</form>
+
+
+{% endblock content %}
