@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список программ обучения{% endblock pagename %}
+{% block title %}Список программ обучения{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'education-program-create' %}"><i
+    class="fas fa-plus"></i> Добавить</a>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="universitytable" style="width: 100%" class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th class="text-center">Действие</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for education_program in education_programs %}
+{#        <tr class='clickable-row' data-href="{% url  'university-detail' university.id %}">#}
+        <tr>
+          <td>{{ forloop.counter}}</td>
+          <td>{{ education_program.name}}</td>
+          <td class="text-center">
+              <div class="btn-group">
+                  <a type="button" class="btn btn-primary" href="{% url 'education-program-update' education_program.id %}"><i class="fa fa-edit"></i> Изменить</a>
+                  <a type="button" class="btn btn-danger" href="{% url 'education-program-delete' education_program.id %}"><i class="fa fa-trash"></i>  Удалить</a>
+              </div>
+          </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+
+
+{% endblock morejs %}

@@ -142,6 +142,41 @@
                             <i class="nav-icon fas fa-graduation-cap"></i> Учебные заведения КР
                         </a>
                       </li>
+                      <li class="nav-item">
+                        <a href="{% url 'parent-types-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Степени родства
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'genders-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Справочник полов
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'types-of-applying-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Линии поступления
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'education-programs-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Программы обучения
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'education-forms-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Формы обучения
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'countries-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Справочник стран
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'statuses-list' %}" class="dropdown-item">
+                            <i class="nav-icon fas fa-list"></i> Справочник статусов
+                        </a>
+                      </li>
                     </ul>
                 </li>
             {% endif %}

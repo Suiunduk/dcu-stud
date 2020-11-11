@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% block pagename %}Список линий поступления{% endblock pagename %}
+{% block title %}Список линий поступления{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'type-of-applying-create' %}"><i
+    class="fas fa-plus"></i> Добавить</a>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="universitytable" style="width: 100%" class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th class="text-center">Действие</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for type_of_applying in types_of_applying %}
+{#        <tr class='clickable-row' data-href="{% url  'university-detail' university.id %}">#}
+        <tr>
+          <td>{{ forloop.counter}}</td>
+          <td>{{ type_of_applying.name}}</td>
+          <td class="text-center">
+              <div class="btn-group">
+                  <a type="button" class="btn btn-primary" href="{% url 'type-of-applying-update' type_of_applying.id %}"><i class="fa fa-edit"></i> Изменить</a>
+                  <a type="button" class="btn btn-danger" href="{% url 'type-of-applying-delete' type_of_applying.id %}"><i class="fa fa-trash"></i>  Удалить</a>
+              </div>
+          </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+
+
+{% endblock morejs %}
