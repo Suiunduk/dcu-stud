@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +12,8 @@ from tablib import Dataset
 from django.utils.translation import gettext as _
 
 from django.contrib.auth.decorators import login_required
+
+from core.decorators import superuser_required
 from edu_organisation.models import EduOrganisation
 from university_employee.models import Employee
 
@@ -59,3 +61,35 @@ class OrganisationUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView
 class OrganisationDeleteView(LoginRequiredMixin, DeleteView):
     model = EduOrganisation
     success_url = reverse_lazy('organisations-list')
+
+
+@superuser_required
+def edu_org_upload(request):
+    if request.method == 'POST':
+        dataset = Dataset()
+        new_orgs = request.FILES['myfile']
+        imported_data = dataset.load(new_orgs.read(), format='xlsx')
+        org_type = None
+        for data in imported_data:
+            if data[1] is not None:
+                if data[4] is not None and data[4] == 1:
+                    org_type = 'school'
+                elif data[4] is not None and data[4] == 2:
+                    org_type = 'college'
+                elif data[4] is not None and data[4] == 3:
+                    org_type = 'lyceum'
+                elif data[4] is not None and data[4] == 2:
+                    org_type = 'university'
+
+                value = EduOrganisation(
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3],
+                    data[4]
+                )
+                value.save()
+        return redirect('organisations-list')
+
+    return render(request, 'edu_organisation/eduorganisations_upload.html')
+

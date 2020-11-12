@@ -3,6 +3,8 @@
 {% block title %}Список стран{% endblock title %}
 
 {% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'country-upload' %}"><i
+    class="fas fa-file-upload"></i> Загрузить с файла</a>
 <a class="btn btn-primary" href="{% url 'country-create' %}"><i
     class="fas fa-plus"></i> Добавить</a>
 {% endblock breadcrumb %}
@@ -24,7 +26,7 @@
         <tr>
           <td>{{ forloop.counter}}</td>
           <td>{{ country.name_ru}}</td>
-          <td>{{ country.latitude }}, {{ country.longitude }}</td>
+          <td>{{ country.latitude }} | {{ country.longitude }}</td>
           <td class="text-center">
               <div class="btn-group">
                   <a type="button" class="btn btn-primary" href="{% url 'country-update' country.id %}"><i class="fa fa-edit"></i> Изменить</a>

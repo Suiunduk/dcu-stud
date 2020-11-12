@@ -7,8 +7,10 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from tablib import Dataset
 
 from announcement.models import Announcement, AnnouncementDocument
+from core.decorators import superuser_required
 from core.models import ParentType, Gender, TypeOfApplying, EducationProgram, EducationForm, Status, Country
 from student_applicant.models import StudentApplicant
 from university_employee.models import Employee
@@ -299,3 +301,26 @@ class CountryUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class CountryDeleteView(LoginRequiredMixin, DeleteView):
     model = Country
     success_url = reverse_lazy('countries-list')
+
+
+@superuser_required
+def country_upload(request):
+    if request.method == 'POST':
+        dataset = Dataset()
+        new_country = request.FILES['myfile']
+        imported_data = dataset.load(new_country.read(), format='xlsx')
+        print(imported_data)
+        for data in imported_data:
+            if data[1] is not None:
+                value = Country(
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3],
+                    data[4]
+                )
+                value.save()
+        return redirect('countries-list')
+
+    return render(request, 'core/countries_upload.html')
+

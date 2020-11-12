@@ -101,7 +101,7 @@ def student_upload(request):
         dataset = Dataset()
         new_students = request.FILES['myfile']
         employee = Employee.objects.get(pk=request.user.id)
-        university = employee.university
+        edu_organisation = employee.edu_organisation
         ethKyrg = False
         imported_data = dataset.load(new_students.read(), format='xlsx')
         print(imported_data)
@@ -118,7 +118,7 @@ def student_upload(request):
                     ethKyrg,
                     data[4],
                     data[5],
-                    university.id,
+                    edu_organisation.id,
                     data[6],
                     data[7],
                     data[8],

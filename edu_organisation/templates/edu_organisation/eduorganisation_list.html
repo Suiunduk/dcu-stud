@@ -3,6 +3,8 @@
 {% block title %}Список учебных заведений{% endblock title %}
 
 {% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'organisation-upload' %}"><i
+    class="fas fa-file-upload"></i> Добавить</a>
 <a class="btn btn-primary" href="{% url 'organisation-create' %}"><i
     class="fas fa-plus"></i> Добавить</a>
 {#<a class="btn btn-primary" href="{% url 'university-upload' %}"><i#}
@@ -22,7 +24,7 @@
     <tbody>
 
       {% for organisation in organisations %}
-        <tr class='clickable-row' data-href="{% url  'university-detail' university.id %}">
+        <tr class='clickable-row' data-href="{% url  'organisation-detail' organisation.id %}">
           <td>{{ forloop.counter}}</td>
           <td>{{ organisation.org_name}}</td>
           <td>{{ organisation.org_code }}</td>
