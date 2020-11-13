@@ -188,7 +188,7 @@ class ApplicantAnnouncementDetailView(LoginRequiredMixin, DetailView):
 
 
 def request_change_status(request, pk):
-    announcement_applicants = AnnouncementApplicants.objects.get(announcement_id=pk)
+    announcement_applicants = AnnouncementApplicants.objects.get(applicant_id=pk)
     announcement_applicants.status = 'waiting'
     announcement_applicants.save()
     return redirect('applicant-announcements-list', request.user.id)

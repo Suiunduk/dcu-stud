@@ -36,8 +36,8 @@ class TypeOfApplying(models.Model):
 class Country(models.Model):
     name_ru = models.CharField(verbose_name=_("Название на русском"), max_length=255)
     name_en = models.CharField(verbose_name=_("Название на английском"), max_length=255)
-    latitude = models.FloatField(verbose_name=_("Широта"), blank=True)
-    longitude = models.FloatField(verbose_name=_("Долгота"), blank=True)
+    longitude = models.DecimalField(verbose_name=_("Долгота"), blank=True, max_digits=9, decimal_places=6)
+    latitude = models.DecimalField(verbose_name=_("Широта"), blank=True, max_digits=9, decimal_places=6)
 
     def __str__(self):
         return f'{self.name_ru}'

@@ -37,6 +37,7 @@
     <orderEntry type="library" name="fusioncharts" level="application" />
     <orderEntry type="library" name="fusioncharts.theme.fusion" level="application" />
     <orderEntry type="library" name="ionicons" level="application" />
+    <orderEntry type="library" name="mapbox-gl" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

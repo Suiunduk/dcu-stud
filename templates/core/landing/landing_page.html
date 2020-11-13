@@ -254,6 +254,12 @@
           </div>
         </div>
       </div>
+      <div class="container-fluid mt-5">
+        <div id="map" style="width: 100%; height: 600px">
+
+        </div>
+      </div>
+
     </section>
 
     <!--==========================
@@ -479,4 +485,87 @@
 
   </main>
 {% endblock main %}
+{% block morescript %}
+    <script>
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic3VpdW5kdWsiLCJhIjoiY2toZzBmb2N0MG4xbjJ5bHVvcGtnN3czNSJ9.u3yPPUUS8Em17Uk0ERU_ig';
+        var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/dark-v10',
+        center: [0, 50],
+        zoom: 1.6
+        });
 
+
+        var images = {
+            'popup': '{% static 'img/circular1.png' %}'
+        };
+
+        loadImages(images, function (loadedImages) {
+
+            map.addImage('popup', loadedImages['popup'], {
+                pixelRatio: 2
+            });
+
+                map.addSource('points', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': [
+                            {% for country in for_map %}
+                            {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [num_to_float({{ country.education_country__longitude }}), num_to_float({{ country.education_country__latitude }})]
+                                },
+                                'properties': {
+                                    'image-name': 'popup',
+                                    'name': '{{ country.count }}'
+                                }
+                            },
+                            {% endfor %}
+                        ]
+                    }
+                });
+
+                map.addLayer({
+                    'id': 'points',
+                    'type': 'symbol',
+                    'source': 'points',
+                    'layout': {
+                        'text-field': ['get', 'name'],
+                        'icon-image': ['get', 'image-name'],
+                        'icon-allow-overlap': true,
+                        'text-allow-overlap': true
+                    }
+                });
+        });
+
+        function loadImages(urls, callback) {
+            var results = {};
+            for (var name in urls) {
+                map.loadImage(urls[name], makeCallback(name));
+            }
+
+            function makeCallback(name) {
+                return function (err, image) {
+                    results[name] = err ? null : image;
+
+                    // if all images are loaded, call the callback
+                    if (Object.keys(results).length === Object.keys(urls).length) {
+                        callback(results);
+                    }
+                };
+            }
+        }
+
+
+
+        function num_to_float(num) {
+            return  num.toString().replace(/,/, ".")
+        }
+    </script>
+{% endblock morescript %}

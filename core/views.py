@@ -50,6 +50,10 @@ def homepage(request):
         students_count = StudentAbroad.objects.all().count()
         students_count_by_country = StudentAbroad.objects.all().values('education_country__name_ru'). \
                                         annotate(count=Count('education_country')).order_by('-count')[:10]
+        students_count_by_country_map = StudentAbroad.objects.all().values('education_country__latitude',
+                                                                           'education_country__longitude',
+                                                                           'education_country__name_ru'). \
+                                        annotate(count=Count('education_country')).order_by('-count')
         students_country_count = StudentAbroad.objects.values('education_country').distinct().count()
         abr_students_count = StudentForeign.objects.all().count()
         abr_students_count_by_country = StudentForeign.objects.all().values('country'). \
@@ -73,7 +77,8 @@ def homepage(request):
                                                                   "abr_students_country_count":
                                                                       abr_students_country_count,
                                                                   "announcements": announcements,
-                                                                  "announcement_docs": announcement_docs})
+                                                                  "announcement_docs": announcement_docs,
+                                                                  "for_map": students_count_by_country_map})
 
 
 class AnnouncementDetailView(DetailView):
