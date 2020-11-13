@@ -211,8 +211,8 @@ class StudentCreateForm(UserCreationForm):
         user = super(StudentCreateForm, self).save(commit=False)
         user.user_type = 'student_abroad'
         user.username = self.cleaned_data.get('email')
-        user.last_name = self.cleaned_data.get('last_name')
-        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('lastname')
+        user.first_name = self.cleaned_data.get('firstname')
         user.save()
         student = StudentAbroad.objects.create(user=user,
                                                lastname=self.cleaned_data.get('lastname'),

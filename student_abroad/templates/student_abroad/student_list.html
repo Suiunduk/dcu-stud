@@ -15,33 +15,6 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-<button class="btn btn-secondary" id="show-btn" style="margin-bottom: 10px"> Показать/Скрыть столбцы <i class="fas fa-arrow-down" id="btn-icon"></i></button>
-<div class="list_view border" id="checkboxes" style="display: none">
-<div class="row">
-    <div class="col-md-3">
-        <label class="form-control" for="1"><input  type="checkbox" name="list" data-target ="1" value="Ф.И.О" id="1" checked> Ф.И.О</label>
-        <label class="form-control" for="2"><input  type="checkbox" name="list" data-target ="2" value="Дата рождения" id="2"> Дата рождения</label>
-        <label class="form-control" for="3"><input  type="checkbox" name="list" data-target ="3" value="Пол" id="3" checked> Пол</label>
-        <label class="form-control" for="4"><input  type="checkbox" name="list" data-target ="4" value="Предыдущий ВУЗ" id="4" checked> Предыдущий ВУЗ/СПУЗ</label>
-        <label class="form-control" for="5"><input  type="checkbox" name="list" data-target ="5" value="Школа" id="5"> Школа</label>
-    </div>
-    <div class="col-md-3">
-        <label class="form-control" for="6"><input  type="checkbox" name="list" data-target ="6" value="Линия поступления" id="6"> Линия поступления</label>
-        <label class="form-control" for="7"><input  type="checkbox" name="list" data-target ="7" value="Страна обучения" id="7" checked> Страна обучения</label>
-        <label class="form-control" for="8"><input  type="checkbox" name="list" data-target ="8" value="Зарубежное место обучения" id="8"> Зарубежное место обучения</label>
-        <label class="form-control" for="9"><input  type="checkbox" name="list" data-target ="9" value="Год поступления" id="9"> Год поступления</label>
-        <label class="form-control" for="10"><input  type="checkbox" name="list" data-target ="10" value="Программа обучения" id="10"> Программа обучения</label>
-    </div>
-    <div class="col-md-3">
-        <label class="form-control" for="11"><input  type="checkbox" name="list" data-target ="11" value="Период обучения" id="11"> Период обучения</label>
-        <label class="form-control" for="12"><input  type="checkbox" name="list" data-target ="12" value="Специальность" id="12" checked> Специальность</label>
-        <label class="form-control" for="13"><input  type="checkbox" name="list" data-target ="13" value="Форма обучения" id="13"> Форма обучения</label>
-        <label class="form-control" for="14"><input  type="checkbox" name="list" data-target ="14" value="Статус" id="14" checked> Статус</label>
-        <label class="form-control" for="16"><input  type="checkbox" name="list" data-target ="16" value="E-mail" id="15" checked> E-mail</label>
-    </div>
-</div>
-
-</div>
 
   <table id="studenttable" style="width: 100%" class="table table-bordered table-hover" data-page-length='100'>
     <thead class="thead-light">
@@ -51,7 +24,6 @@
         <th>Дата рождения</th>
         <th>Пол</th>
         <th>Предыдущее обучение</th>
-        <th>Школа</th>
         <th>Линия поступления</th>
         <th>Страна обучения</th>
         <th>Зарубежное место обучения</th>
@@ -73,7 +45,6 @@
           <td>{{ student.date_of_birth }}</td>
           <td>{{ student.gender }}</td>
           <td>{{ student.edu_organisation }}</td>
-          <td>{{ student.school }}</td>
           <td>{{ student.type_of_applying }}</td>
           <td>{{ student.education_country }}</td>
           <td>{{ student.university_name }}</td>
@@ -94,88 +65,49 @@
 
 {% block morejs %}
 <script type="text/javascript">
-$(function () {
-    $("#student-create").modalForm({
-            formURL: "{% url 'student-create' %}",
-            modalID: "#create-modal"
-    });
-});
-$(document).ready(function () {
-
-    /** Создаем поисковые поля для каждого столбца*/
-    $('#studenttable thead tr').clone(true).appendTo( '#studenttable thead' );
-    $('#studenttable thead tr:eq(1) th').each( function (i) {
-        var title = $(this).text();
-
-
-        /*if($(this).index() == 0 || $(this).index() == 1 || $(this).index() == 2 || $(this).index() == 5){*/
-            $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" />' );
-            $('input', this).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        /*}*/
-    } );
-
-    /** Создаем DataTable*/
-    var table = $('#studenttable').DataTable({
-        orderCellsTop: true,
-        paging: false,
-        fixedHeader: true,
-        dom: 'Bfrtip',
-        /**Задаем по умолчанию невидимые столбцы*/
-        columnDefs : [
-            //hide the second & fourth column
-            { 'visible': false, 'targets': [2, 5, 6, 8, 9, 10, 11, 13] }
-        ],
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                text: '<i class="fa fa-download"></i> Excel',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                text: '<i class="fa fa-download"></i> PDF',
-                exportOptions: {
-                    columns: ':visible',
+ $(function () {
+    $("#studenttable").DataTable({
+      "scrollX": true,
+      "language": {
+                    "processing": "Подождите...",
+                    "search": "Поиск:",
+                    "lengthMenu": "Показать _MENU_ записей",
+                    "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                    "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                    "infoPostFix": "",
+                    "loadingRecords": "Загрузка записей...",
+                    "zeroRecords": "Записи отсутствуют.",
+                    "emptyTable": "В таблице отсутствуют данные",
+                    "paginate":
+                    {
+                        "first": "Первая",
+                        "previous": "Предыдущая",
+                        "next": "Следующая",
+                        "last": "Последняя"
+                    },
+                    "aria": {
+                        "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                        "sortDescending": ": активировать для сортировки столбца по убыванию"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "Выбрано записей: %d",
+                            "0": "Кликните по записи для выбора",
+                            "1": "Выбрана одна запись"
+                        }
+                    },
+                    "buttons":
+                    {
+                         "print": "Печать",
+                         "colvis": "Видимость столбцов"
+                    }
                 },
-                orientation: 'landscape',
-                pageSize: 'LEGAL'
-            }
+       columnDefs : [
+            { 'visible': false, 'targets': [2, 3, 7, 8, 9, 10, 11, 12] }
         ],
-        "language": {"url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"},
-        "scrollX": true
-    });
-
-    /** Функция работающая при смене галочек*/
-    $('.list_view input[type="checkbox"]').on('change', function(e) {
-        // Get the column API object
-        var col = table.column($(this).attr('data-target'));
-        // Toggle the visibility
-        col.visible(!col.visible());
-    });
-    /** Функция для кнопки скрыть/показать столбцы */
-    $(document).on('click', '#show-btn', function(e) {
-        var div = document.getElementById('checkboxes')
-        var icon = document.getElementById('btn-icon')
-
-        if(div.style.display === "none"){
-            div.style.display = "block"
-            icon.classList.remove("fa-arrow-down")
-            icon.classList.add("fa-arrow-up")
-        }else{
-            div.style.display = "none"
-            icon.classList.remove("fa-arrow-up")
-            icon.classList.add("fa-arrow-down")
-        }
-    });
-});
+      "buttons": ["csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#studenttable_wrapper .col-md-6:eq(0)');
+  });
 </script>
 {% endblock morejs %}

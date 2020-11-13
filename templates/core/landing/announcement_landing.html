@@ -30,19 +30,16 @@
               <div class="icon"><i class="ion-ios-checkmark-outline" style="color: #41cf2e;"></i></div>
               <h4 class="title">Сроки приема документов:</h4>
               <p class="description">{{ object.beginning_date }} - {{ object.end_date }}</p>
-            </div>
-          </div>
-          <div class="col-md-12 col-lg-12 wow" data-wow-duration="1.4s">
-            <div class="box m-1 mb-3">
-              <div class="icon"><i class="ion-ios-checkmark-outline" style="color: #41cf2e;"></i></div>
+              <hr class="ml-3">
               <h4 class="title">Страна:</h4>
               <p class="description">{{ object.destination_country }}</p>
             </div>
           </div>
         </div>
 
+        {% if documents %}
         <div class="row">
-          <div class="col-md-12 col-lg-12"><h5>Дополнительные файлы:</h5></div>
+          <div class="col-md-12 col-lg-12"><h5>Файлы и образцы:</h5></div>
           {% for document in documents %}
               <div class="col-md-4 col-lg-4 " data-wow-duration="1.4s">
                 <div class="box">
@@ -53,10 +50,24 @@
               </div>
           {% endfor %}
         </div>
+        {% endif %}
+        {% if add_documents %}
+        <div class="row">
+          <div class="col-md-12 col-lg-12"><h5>Обязательные документы:</h5></div>
+              <div class="col-md-12 col-lg-12 " data-wow-duration="1.4s">
+                <div class="box">
+                  <div class="icon"><i class="ion-ios-bookmarks-outline" style="color: #fa1b1b;"></i></div>
+                  {% for add_documents in add_documents %}
+                    <h5 class="title"><i class="fa fa-asterisk" style="color: #fa1b1b"></i> {{ add_documents.name }}</h5>
+                  {% endfor %}
+                </div>
+              </div>
+        </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-12 col-lg-12 ">
                 <div class="pull-right">
-                    <a class="btn btn-primary" href="{% url 'signup-applicant' object.id %}">Зарегестрироваться</a>
+                    <a class="btn btn-primary" href="{% url 'signup-applicant' object.id %}">Зарегистрироваться</a>
                 </div>
             </div>
         </div>

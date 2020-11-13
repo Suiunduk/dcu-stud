@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from tablib import Dataset
 
-from announcement.models import Announcement, AnnouncementDocument
+from announcement.models import Announcement, AnnouncementDocument, AnnouncementAdditionalDocumentNames
 from core.decorators import superuser_required
 from core.models import ParentType, Gender, TypeOfApplying, EducationProgram, EducationForm, Status, Country
 from student_applicant.models import StudentApplicant
@@ -48,7 +48,7 @@ def homepage(request):
 
     else:
         students_count = StudentAbroad.objects.all().count()
-        students_count_by_country = StudentAbroad.objects.all().values('education_country'). \
+        students_count_by_country = StudentAbroad.objects.all().values('education_country__name_ru'). \
                                         annotate(count=Count('education_country')).order_by('-count')[:10]
         students_country_count = StudentAbroad.objects.values('education_country').distinct().count()
         abr_students_count = StudentForeign.objects.all().count()
@@ -83,6 +83,7 @@ class AnnouncementDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AnnouncementDetailView, self).get_context_data(**kwargs)
         context['documents'] = AnnouncementDocument.objects.filter(announcement=self.kwargs['pk'])
+        context['add_documents'] = AnnouncementAdditionalDocumentNames.objects.filter(announcement=self.kwargs['pk'])
         return context
 
 
@@ -323,4 +324,3 @@ def country_upload(request):
         return redirect('countries-list')
 
     return render(request, 'core/countries_upload.html')
-

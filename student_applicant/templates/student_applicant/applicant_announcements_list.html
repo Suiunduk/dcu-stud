@@ -45,7 +45,7 @@
             {% endif %}
             <td style="text-align: center">
                 {% if announcement.status == 'not_confirmed' %}
-                    <a class="btn-sm btn-warning" href="{% url  'student-applicant-announcement-change' announcement.announcement.id%}">Запросить пересмотр</a>
+                    <a class="btn-sm btn-warning" href="{% url  'student-applicant-announcement-change' announcement.applicant.id%}">Запросить пересмотр</a>
                 {% endif %}
             </td>
             <td style="text-align: center">
