@@ -18,7 +18,7 @@ urlpatterns = [
     path('all_announcement_list/<int:pk>/', views.announcements_list, name='all-announcements-list'),
     path('announcement/detail/<int:pk>/', views.ApplicantAnnouncementDetailView.as_view(),
          name='student-applicant-announcement-detail'),
-    path('request_change_status/<int:pk>/', views.request_change_status, name='student-applicant-announcement-change'),
+    path('request_change_status/<int:pk>/<int:fk>', views.request_change_status, name='student-applicant-announcement-change'),
     path('announcement_apply/<int:pk>/', views.apply_for_announcement, name='apply-for-announcement')
 
 ]
